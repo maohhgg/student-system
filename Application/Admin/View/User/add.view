@@ -1,0 +1,94 @@
+<extend name="Public/base"/>
+
+<block name="body">
+    <div class="main-title">
+        <h2>新增用户</h2>
+    </div>
+    <form action="{:U()}" method="post" class="form-horizontal">
+        <div class="form-item">
+            <label class="item-label">用户名<span class="check-tips">（用户名会作为默认的昵称）</span></label>
+            <div class="controls">
+                <input type="text" class="text input-large" name="name" value="">
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label">密码<span class="check-tips">（用户密码不能少于6位）</span></label>
+            <div class="controls">
+                <input type="password" class="text input-large" name="password" value="">
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label">确认密码</label>
+            <div class="controls">
+                <input type="password" class="text input-large" name="repassword" value="">
+            </div>
+        </div>
+         <div class="form-item">
+            <label class="item-label" id="type">用户身份</label>
+            <div class="controls">
+                <select id="selectType" name="type" class="input-large">   
+                    <option value="0">管理员</option>   
+                    <option value="1">教师</option>   
+                    <option value="2">学生</option>   
+                </select>   
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label" id="uid">工号<span class="check-tips">（教师的工作号）</span></label>
+            <div class="controls">
+                <input type="text" class="text input-large" name="uid" value="">
+            </div>
+        </div>
+         <div class="form-item hidden" id="classID">
+            <label class="item-label">班级<span class="check-tips">（学生所在班级）</span></label>
+            <div class="controls">
+                <input type="text" class="text input-large" name="cid" value="">
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label" id="date">入职时间<span class="check-tips">（教师到校工作时间）</span></label>
+            <div class="controls">
+                <input type="date" class="text input-large" name="date" value="">
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label" id="status">状态</label>
+            <div class="controls">
+                <select id="selectStatus" name="status" class="input-large">   
+                    <option value="-1">毕业</option>   
+                    <option value="0">离职</option>   
+                    <option value="1" selected="selected">在职</option>   
+                    <option value="2">在读</option>   
+                    <option value="3">请假中..</option>   
+                </select>   
+            </div>
+        </div>
+        <div class="form-item">
+            <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+            <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+        </div>
+    </form>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        //导航高亮
+        highlight_subnav('{:U(CONSTROLLER_NAME.'/'.ACTION_NAME)}');
+
+        //
+        $("#selectType").bind("change", function(){
+            if($(this).val() == 2){
+                $('#uid').html("学号<span class='check-tips'>（学生的学号）</span>");
+                $('#date').html("入校时间<span class='check-tips'>（可以不填，默认为所在专业班级开班时间）</span>");
+                $("#selectStatus option[value='"+2+"']").attr("selected",true);
+                $('#classID').show();
+            } else {
+                $('#uid').html("工号<span class='check-tips'>（教师的工作号）</span>");
+                $('#date').html("入职时间<span class='check-tips'>（教师到校工作时间）");
+                $("#selectStatus option[value='"+1+"']").attr("selected",true);
+                $('#classID').hide();
+            }
+        });
+
+    </script>
+</block>
