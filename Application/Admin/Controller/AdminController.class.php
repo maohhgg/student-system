@@ -78,13 +78,20 @@ class AdminController extends Controller {
         }
         unset($REQUEST['_order'],$REQUEST['_field']);
 
+        $options['where'] = array_filter($where, function($val){
+            if($val===''||$val===null){
+                return false;
+            }else{
+                return true;
+            }
+        });
+
         if( empty($options['where'])){
             unset($options['where']);
         }
         $options      =   array_merge( (array)$OPT->getValue($model), $options );
-        $total        =   $model->where($options['where'])->count();
+        $total        =   $model->where($options['where'])->fetchSql(true)->count();
 
-        
         if( isset($REQUEST['r']) ){
             $listRows = (int)$REQUEST['r'];
         }else{

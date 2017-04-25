@@ -1,0 +1,93 @@
+<extend name="Public/base"/>
+<block name="body">
+    <div class="main-title">
+        <h2>新增班级</h2>
+    </div>
+    <form action="{:U()}" method="post" class="form-horizontal">
+        <div class="form-item">
+            <label class="item-label">所属系别</label>
+            <div class="controls">
+                <select id="selectType" name="type" class="input-large">
+                <foreach name="_department" item="vo">
+                    <option value="{$i}">{$key}</option>   
+                </foreach>
+                </select>   
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label">专业名称</label>
+            <div class="controls">
+                <select name="name" class="input-large">
+
+                <volist name="_department" id="vo" key="key">
+                     <?php $tmp = $key; ?>
+                     <volist name="vo" id="v">
+                         <option class="department-option {$tmp}" value="{$v}" style="display: none;">{$v}</option>  
+                     </volist>
+                </volist>
+
+                </select>   
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label" id="date"></label>
+            <div class="controls">
+                <input type="date" id="html5date" class="text input-large" name="date" value="">
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label">年级</label>
+            <div class="controls">
+                <input type="text" id="grade" readonly class="text input-large" name="grade" value="">
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label">第几班</label>
+            <div class="controls">
+                <input type="text" class="text input-large" name="no" value="">
+            </div>
+        </div>
+        <div class="form-item">
+            <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+            <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+        </div>
+    </form>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        //导航高亮
+        highlight_subnav('{:U(CONSTROLLER_NAME.'/'.ACTION_NAME)}');
+
+        // 检查对html5的支持
+        var i = document.getElementById('html5date');
+        var c = "开班时间<span class='check-tips'>（本班级开始授课时间）</span>";
+
+            
+        if(i.type === 'date'){
+
+        } else {
+            c = "开班时间<span class='check-tips'>（本班级开始授课时间 格式 2017-01-01）</span>";
+        }
+        $('#date').html(c);
+        // 同步年级
+        $("#html5date").bind("change",function(){
+            $("#grade").val($(this).val().substr(0,4));
+        });
+
+        // 重置系别的id号
+        var type = document.getElementById('selectType');
+        var i = 0;
+        [].forEach.call(type.children, function(element,i) {
+            element.value = i;
+        });
+
+        //同步专业和系别
+        $('.'+$("#selectType option:selected").text()).show();
+        $("#selectType").bind("change", function(){
+            $('.department-option').hide();
+            $('.'+$("#selectType option:selected").text()).show();
+            $('.'+$("#selectType option:selected").text()).eq(0).attr("selected",true);
+        });
+    </script>
+</block>

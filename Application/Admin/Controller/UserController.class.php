@@ -59,14 +59,14 @@ class UserController extends AdminController {
     }
 
     public function teacher(){
-        $list   = $this->lists('User',);
+        $list = $this->lists('User',['type'=>1]);
         int_to_string($list);
         $this->assign('_list', $list);
         $this->meta_title = '教师管理';
         $this->display();
     }
     public function student(){
-        $list   = $this->lists('User');
+        $list = $this->lists('User',['type'=>2]);
         int_to_string($list);
         $this->assign('_list', $list);
         $this->meta_title = '教师管理';

@@ -39,16 +39,16 @@
                 <input type="text" class="text input-large" name="uid" value="">
             </div>
         </div>
-         <div class="form-item hidden" id="classID">
+         <div class="form-item" id="classID" style="display: none;">
             <label class="item-label">班级<span class="check-tips">（学生所在班级）</span></label>
             <div class="controls">
                 <input type="text" class="text input-large" name="cid" value="">
             </div>
         </div>
         <div class="form-item">
-            <label class="item-label" id="date">入职时间<span class="check-tips">（教师到校工作时间）</span></label>
+            <label class="item-label" id="date"></label>
             <div class="controls">
-                <input type="date" class="text input-large" name="date" value="">
+                <input type="date" class="text input-large" name="date" id="html5date" value="">
             </div>
         </div>
         <div class="form-item">
@@ -75,16 +75,35 @@
         //导航高亮
         highlight_subnav('{:U(CONSTROLLER_NAME.'/'.ACTION_NAME)}');
 
-        //
+
+        // 检查对html5的支持
+        var i = document.getElementById('html5date');
+        var c = {
+            a:"学号<span class='check-tips'>（学生的学号）</span>",
+            b:"入校时间<span class='check-tips'>（可以不填，默认为所在专业班级开班时间）</span>",
+            c:"工号<span class='check-tips'>（教师的工作号）</span>",
+            d:"入职时间<span class='check-tips'>（教师到校工作时间）",
+        }
+            
+        if(i.type === 'date'){
+
+        } else {
+            c.b = "入校时间<span class='check-tips'>（可以不填，默认为所在专业班级开班时间 格式 2017-01-01）</span>";
+            c.d = "入职时间<span class='check-tips'>（教师到校工作时间 格式 2017-01-01）";
+        }
+
+        $('#date').html(c.d);
+
+        // 对不同的用户有不同的提示
         $("#selectType").bind("change", function(){
             if($(this).val() == 2){
-                $('#uid').html("学号<span class='check-tips'>（学生的学号）</span>");
-                $('#date').html("入校时间<span class='check-tips'>（可以不填，默认为所在专业班级开班时间）</span>");
+                $('#uid').html(c.a);
+                $('#date').html(c.b);
                 $("#selectStatus option[value='"+2+"']").attr("selected",true);
                 $('#classID').show();
             } else {
-                $('#uid').html("工号<span class='check-tips'>（教师的工作号）</span>");
-                $('#date').html("入职时间<span class='check-tips'>（教师到校工作时间）");
+                $('#uid').html(c.c);
+                $('#date').html(c.d);
                 $("#selectStatus option[value='"+1+"']").attr("selected",true);
                 $('#classID').hide();
             }
