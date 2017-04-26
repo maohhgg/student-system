@@ -9,7 +9,15 @@ return array(
     ),
     /* 导航菜单 */
     'TEMP_MENU' =>  array(
-        ['title'=>'首页','url'=>'Index/index'],
+        [
+            'title'=>'首页',
+            'url'=>'Index/index',
+            'child' =>[
+                '首页' => [
+                     ['title'=>'首页','url'=>'Index/index'],
+                ]
+            ],
+        ],
         [
             'title' =>'用户',
             'url'   =>'User/index',
@@ -28,9 +36,12 @@ return array(
             'title'=>'内容',
             'url'=>'Article/index',
             'child' =>[
-                '用户管理' => [
-                    ['title'=>'学生管理','url'=>'User/index'],
-                    ['title'=>'教师管理','url'=>'User/teacher'],
+                '作业管理' => [
+                    ['title'=>'所有作业','url'=>'Article/index'],
+                    ['title'=>'作业管理','url'=>'Article/manager'],
+                ],
+                '文件管理' => [
+                    ['title'=>'所有文件','url'=>'Article/file'],
                 ]
             ],
         ],

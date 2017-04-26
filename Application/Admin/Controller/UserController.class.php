@@ -1,6 +1,7 @@
 <?php
 namespace Admin\Controller;
 use User\Api\UserApi as UserApi;
+use Admin\Api\ClassApi as ClassApi;
 
 
 class UserController extends AdminController {
@@ -8,6 +9,8 @@ class UserController extends AdminController {
     public function index(){
         $list   = $this->lists('User');
         int_to_string($list);
+        $class = new ClassApi();
+        $list = $class->int_2_string($list);
         $this->assign('_list', $list);
         $this->meta_title = '所有用户';
         $this->display();
@@ -69,6 +72,8 @@ class UserController extends AdminController {
     public function student(){
         $list = $this->lists('User',['type'=>2]);
         int_to_string($list);
+        $class = new ClassApi();
+        $list = $class->int_2_string($list);
         $this->assign('_list', $list);
         $this->meta_title = '教师管理';
         $this->display();

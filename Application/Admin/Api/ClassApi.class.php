@@ -39,4 +39,36 @@ class ClassApi extends Api{
     public function merge($map,$array = []){
         return $this->model->merge($map,$array);
     }
+
+    /**
+     *  对包含学生的数组进行班级id对班级信息的转换
+     * @param  Array $array       包含用户的数组 可一维数组 可二维数组
+	 * @return Array       替换完成的数组       
+     */
+    public function int_2_string($array){
+        if(count($array) == count($array,1)){
+            if($this->is_student($array)){
+               return $this->bind_class($array);
+            }
+        } else {
+            foreach($array as $key => $v){
+                if($this->is_student($v)){
+                    $array[$key] = $this->bind_class($array[$key]);
+                }
+            }
+            return $array;
+        }
+        
+    }
+
+    private function is_student($array){
+        return $array['type'] == 2 ? true : false;
+    }
+
+    private function bind_class($data){
+        if(is_numeric($data['cid'])){
+            $data['class'] = $this->info($data['cid'])['text'];  
+        }
+        return $data;
+    }
 }

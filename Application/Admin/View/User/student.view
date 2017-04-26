@@ -43,7 +43,7 @@
                     <td>{$vo.id} </td>
                     <td>{$vo.name}</td>
                     <td>{$vo.uid}</td>
-                    <td>{$vo.cid}</td>
+                    <td>{$vo.class}</td>
                     <td>{$vo.date}</td>
                     <td>{$vo.status_text}</td>
                     <td>
