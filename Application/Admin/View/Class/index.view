@@ -30,6 +30,7 @@
 					<th class="">名称</th>
 					<th class="">系别</th>
 					<th class="">班级设立时间</th>
+					<th class="">状态</th>
 					<th class="">操作</th>
 				</tr>
 			</thead>
@@ -42,6 +43,13 @@
 					<td>{$vo.text}</td>
 					<td>{$vo.type}</td>
 					<td>{$vo.date}</td>
+					<td>
+						<eq name="vo.status" value="1">
+							在校
+						<else/>
+							已毕业
+						</eq>
+					</td>
 					<td>
 						<a href="{:U('Class/changeStatus?method=change&id='.$vo['id'])}" class="ajax-get">编辑</a>
 						<a href="{:U('Class/changeStatus?method=delete&id='.$vo['id'])}" class="confirm ajax-get">删除</a>

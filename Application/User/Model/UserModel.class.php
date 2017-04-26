@@ -24,7 +24,8 @@ class UserModel extends Model{
 		/* 验证用户名 */
 		array('name', '1,30', -1, self::EXISTS_VALIDATE, 'length'), //用户名长度不合法
 		/* 验证登记时间 */
-		array('date', "1970-1-1 0:0:0,{date('Y-m-d H:i:s')}", -12, self::EXISTS_VALIDATE, 'expire'), //用户名长度不合法
+		array('date', "8,10", -12, self::EXISTS_VALIDATE, 'length'), 
+		array('uid', '',-3,self::EXISTS_VALIDATE,'unique',1), 
 
 		/* 验证密码 */
 		array('password', '6,30', -4, self::EXISTS_VALIDATE, 'length'), //密码长度不合法

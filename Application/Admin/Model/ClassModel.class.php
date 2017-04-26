@@ -26,6 +26,7 @@ class ClassModel extends Model{
 		array('date', '8,10', -3, self::EXISTS_VALIDATE, 'length'),  // 时间数据不合法
 		array('grade', '4,4', -4, self::EXISTS_VALIDATE, 'length'),  // 年级数据不合法
 		array('no', '1,4', -5, self::EXISTS_VALIDATE, 'length'),  // 班号数据不合法
+		array('status', [0,1], -6, self::EXISTS_VALIDATE, 'in'),  // 班级状态数据不合法
 
 	);
 
@@ -38,15 +39,17 @@ class ClassModel extends Model{
 	 * @param  string $no      班号
      * @param  string $date     开学时间
 	 * @param  string $type     所属系
+	 * @param  string $status    班级状态  0 已毕业  1正常
      * @return integer          添加成功-班级id，注册失败-错误编号
      */
-	public function insert($grade, $name, $no, $date, $type){
+	public function insert($grade, $name, $no, $date, $type, $status){
         $data = [
 			'grade' => $grade,
 			'name' => $name,
 			'no' => $no,
 			'date' => $date,
 			'type' => $type,
+			'status' => $status,
 		];
 
 		/* 新增 */
@@ -65,7 +68,7 @@ class ClassModel extends Model{
 	 */
 	public function info($id){
 		$map = ['id' => $id];
-		$class = $this->where($map)->field('id,grade,name,no,date,type')->find();
+		$class = $this->where($map)->field('id,grade,name,no,date,type,status')->find();
 		if(is_array($class)){
 			return $this->merge($class);
 		} else {
@@ -75,7 +78,6 @@ class ClassModel extends Model{
 
 	/* 使Class信息更有可读性 */
 	public function merge($map,$array = []){
-		print_r($array);
 		if(count($map) == count($map, 1)){
 			$map['text'] = "{$map['grade']}届{$map['name']}{$this->cenvt($map['no'])}班";
 			if(!empty($array)){

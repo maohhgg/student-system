@@ -30,6 +30,7 @@ class UserController extends AdminController {
             }
         } else {
             $this->meta_title = '新增用户';
+            $this->assign("_department",array_keys(C('DEPARTMENT')));
             $this->assign('_action',CONTROLLER_NAME.'/'.ACTION_NAME);
             $this->display();
         }
@@ -43,7 +44,7 @@ class UserController extends AdminController {
         switch ($code) {
             case -1:  $error = '用户名长度必须在16个字符以内！'; break;
             case -2:  $error = '用户名被禁止注册！'; break;
-            case -3:  $error = '用户名被占用！'; break;
+            case -3:  $error = '学号或工号被占用！'; break;
             case -4:  $error = '密码长度必须在6-30个字符之间！'; break;
             case -5:  $error = '邮箱格式不正确！'; break;
             case -6:  $error = '邮箱长度必须在1-32个字符之间！'; break;

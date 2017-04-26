@@ -20,10 +20,11 @@ class ClassApi extends Api{
 	 * @param  string $no      班号
      * @param  string $date     开学时间
 	 * @param  string $type     所属系
+	 * @param  string $status    班级状态  0 已毕业  1正常
      * @return integer          添加成功-班级id，注册失败-错误编号
      */
-	public function insert($grade, $name, $no, $date, $type){
-        return $this->model->insert($grade, $name, $no, $date, $type);
+	public function insert($grade, $name, $no, $date, $type, $status){
+        return $this->model->insert($grade, $name, $no, $date, $type, $status);
     }
     /**
 	 * 获取班级信息

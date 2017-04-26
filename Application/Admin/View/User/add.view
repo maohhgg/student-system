@@ -39,10 +39,22 @@
                 <input type="text" class="text input-large" name="uid" value="">
             </div>
         </div>
-         <div class="form-item" id="classID" style="display: none;">
+        <div class="form-item classID" style="display: none;">
+            <label class="item-label">专业</label>
+            <div class="controls">
+                <select id="selectDepar" class="input-large">   
+                     <volist name="_department" id="vo">
+                        <option value="{$i - 1}">{$vo}</option>   
+                    </volist> 
+                </select> 
+            </div>
+        </div>
+        <div class="form-item classID" style="display: none;">
             <label class="item-label">班级<span class="check-tips">（学生所在班级）</span></label>
             <div class="controls">
-                <input type="text" class="text input-large" name="cid" value="">
+                <select id="selectClass" name='cid' class="input-large">   
+                    <!-- <option value=""></option> -->
+                </select> 
             </div>
         </div>
         <div class="form-item">
@@ -100,14 +112,41 @@
                 $('#uid').html(c.a);
                 $('#date').html(c.b);
                 $("#selectStatus option[value='"+2+"']").attr("selected",true);
-                $('#classID').show();
+                $('.classID').show();
             } else {
                 $('#uid').html(c.c);
                 $('#date').html(c.d);
                 $("#selectStatus option[value='"+1+"']").attr("selected",true);
-                $('#classID').hide();
+                $('.classID').hide();
             }
         });
 
+        // 自动获取班级信息
+        getClassDetail($("#selectDepar option:selected").text());
+
+        $("#selectDepar").bind('change',function(){
+            var id = $(this).val();
+            if(id){
+               getClassDetail(id);
+            }
+        });
+        // 自动设置入学时间 
+        $("#selectClass")
+
+        function getClassDetail(id){
+             $.ajax({
+                    method : 'POST',
+                    url: '{:U("Class/index")}',
+                    data: 'id='+id,
+                    success : function(data){
+                        $("#selectClass").html("");
+                        data.forEach(function(element) {
+                            $("#selectClass").append("<option value="+ element.id +">"+ element.text +"</option>")
+                            $("#html5date").val(element.date);
+                        }, this);
+                        console.log(data);
+                    }
+            });
+        }
     </script>
 </block>

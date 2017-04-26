@@ -48,6 +48,15 @@
             </div>
         </div>
         <div class="form-item">
+            <label class="item-label">状态</label>
+            <div class="controls">
+               <select name="status" class="input-large" >
+                   <option value="1" selected="selected">正常</option>
+                   <option value="0">已毕业</option>
+               </select>
+            </div>
+        </div>
+        <div class="form-item">
             <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
             <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
         </div>
