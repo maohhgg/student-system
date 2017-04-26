@@ -75,6 +75,8 @@ class AdminController extends Controller {
             $options['order'] = '`'.$REQUEST['_field'].'` '.$REQUEST['_order'];
         }elseif($order){
             $options['order'] = $order;
+        }else{
+            $options['order'] = "id desc";
         }
         unset($REQUEST['_order'],$REQUEST['_field']);
 

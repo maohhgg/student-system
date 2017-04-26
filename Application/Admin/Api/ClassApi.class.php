@@ -33,4 +33,9 @@ class ClassApi extends Api{
 	public function info($id){
        return $this->model->info($id);
     }
+
+    /* 使Class信息更有可读性 */
+    public function merge($map,$array = []){
+        return $this->model->merge($map,$array);
+    }
 }

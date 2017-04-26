@@ -44,7 +44,7 @@
                     <td>{$vo.name}</td>
                     <td>{$vo.uid}</td>
                     <td>{$vo.cid}</td>
-                    <td><span>{$vo.date)}</span></td>
+                    <td>{$vo.date}</td>
                     <td>{$vo.status_text}</td>
                     <td>
                         <a href="{:U('User/changeStatus?method=change&id='.$vo['id'])}" class="ajax-get">编辑</a>
