@@ -70,12 +70,76 @@ class UserController extends AdminController {
         $this->display();
     }
     public function student(){
-        $list = $this->lists('User',['type'=>2]);
+        $map['type'] = 2;
+        $class = I('class');
+        if(!empty($class)){
+            $map['cid'] = $class;
+        }
+        $list = $this->lists('User',$map);
         int_to_string($list);
         $class = new ClassApi();
         $list = $class->int_2_string($list);
         $this->assign('_list', $list);
-        $this->meta_title = '教师管理';
+        $this->meta_title = '学生管理';
         $this->display();
+    }
+    /**
+     * 会员状态修改
+     */
+    public function changeStatus($method=null, $id='', $name='', $password='',$repassword='', $uid='', $type='', $cid='', $date='', $status=''){
+        if(empty($method) && !IS_POST){
+            // 修改单个id
+            $id = I('id');
+            $api  =  new UserApi;
+            $user = $api->info($id);
+            $class = new ClassApi();
+            $user = $class->int_2_string($user);
+            $this->meta_title = '用户管理';
+            $this->assign("_user",$user);
+            $this->assign("_department",array_keys(C('DEPARTMENT')));
+            $this->assign('_action',CONTROLLER_NAME.'/'.ACTION_NAME);
+            $this->display('add');
+        } else if(IS_POST && $id) {
+              /* 检测密码 */
+            if($password != $repassword){
+                $this->error('密码和重复密码不一致！');
+            }
+            /* 调用更新接口更新用户 */
+            $User   =   new UserApi;
+            $data = [
+                'name' => $name, 
+                'password' => $password, 
+                'uid' => $uid, 
+                'type' => $type, 
+                'cid' => $cid, 
+                'date' => $date, 
+                'status' => $status
+            ];
+            foreach($data as $key => $v){
+                if (empty($v)) {
+                    unset($data[$key]); //删除空的属性
+                }
+            }
+            $uid    =   $User->updateInfo($id,$data);
+            if(0 < $uid){ //修改成功
+                $this->success('修改成功！',U('index'));
+            } else { //修改失败，显示错误信息
+                $this->error($this->showRegError($uid));
+            }
+        } else {
+            $id = array_unique((array)I('id',0));
+            $id = is_array($id) ? implode(',',$id) : $id;
+            if ( empty($id) ) {
+                $this->error('请选择要操作的数据!');
+            }
+            $map['uid'] =   array('in',$id);
+            switch ( strtolower($method) ){
+                case 'deleteuser':
+                    $this->delete('Member', $map );
+                    break;
+                default:
+                    $this->error('参数非法');
+            }
+        }
     }
 }

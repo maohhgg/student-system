@@ -28,7 +28,7 @@ return array(
                     ['title'=>'教师管理','url'=>'User/teacher'],
                 ],
                 '操作用户' => [
-                     ['title'=>'新增用户','url'=>'User/add'],
+                     ['title'=>'用户管理','url'=>'User/add'],
                 ]
             ],
         ],   
@@ -42,7 +42,10 @@ return array(
                 ],
                 '文件管理' => [
                     ['title'=>'所有文件','url'=>'Article/file'],
-                ]
+                ],
+                '成绩管理' => [
+                    ['title'=>'成绩信息','url'=>'Article/socre'],
+                ],
             ],
         ],
         [
@@ -51,9 +54,14 @@ return array(
             'child' =>[
                 '班级管理' => [
                     ['title'=>'所有班级','url'=>'Class/index'],
+                    ['title'=>'班级课程','url'=>'Class/have'],
                 ],
                 '操作班级' => [
-                     ['title'=>'新增班级','url'=>'Class/add'],
+                     ['title'=>'班级管理','url'=>'Class/add'],
+                ],
+                '课程管理' => [
+                     ['title'=>'所有课程','url'=>'Class/course/'],
+                     ['title'=>'课程管理','url'=>'Class/course/methon/add'],
                 ]
             ],
         ],

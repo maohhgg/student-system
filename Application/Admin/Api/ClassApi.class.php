@@ -29,15 +29,32 @@ class ClassApi extends Api{
     /**
 	 * 获取班级信息
 	 * @param  string  $id         班级id
+	 * @param  string  $merge      是否启用美化
 	 * @return string             班级信息 2017届软件工程四班
 	 */
-	public function info($id){
-       return $this->model->info($id);
+	public function info($id,$merge = true){
+       return $this->model->info($id,$merge);
     }
 
     /* 使Class信息更有可读性 */
     public function merge($map,$array = []){
         return $this->model->merge($map,$array);
+    }
+
+    /**
+     * 更新班级信息
+     * @param int $uid 班级id
+     * @param array $data 修改的字段数组
+     * @return true 修改成功，false 修改失败
+     */
+    public function updateInfo($uid, $data){
+        if($this->model->updateClassFields($uid, $data) !== false){
+            $return['status'] = true;
+        }else{
+            $return['status'] = false;
+            $return['info'] = $this->model->getError();
+        }
+        return $return;
     }
 
     /**
@@ -56,9 +73,8 @@ class ClassApi extends Api{
                     $array[$key] = $this->bind_class($array[$key]);
                 }
             }
-            return $array;
         }
-        
+        return $array;
     }
 
     private function is_student($array){
@@ -67,7 +83,9 @@ class ClassApi extends Api{
 
     private function bind_class($data){
         if(is_numeric($data['cid'])){
-            $data['class'] = $this->info($data['cid'])['text'];  
+            $class = $this->info($data['cid']);  
+            $data['class'] = $class['text'];
+            $data['tid'] = $class['type'];
         }
         return $data;
     }

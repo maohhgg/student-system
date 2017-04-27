@@ -63,8 +63,8 @@
 					<td>
 						<eq name="vo.type" value="0">
 						<else/>
-						<a href="{:U('User/changeStatus?method=change&id='.$vo['id'])}" class="ajax-get">编辑</a>
-						<a href="{:U('User/changeStatus?method=delete&id='.$vo['id'])}" class="confirm ajax-get">删除</a>
+						<a href="{:U('User/changeStatus?id='.$vo['id'])}">编辑</a>
+                        <a href="{:U('User/changeStatus?method=delete&id='.$vo['id'].'&type='.$vo['type'])}" class="confirm ajax-get">删除</a>
 						</eq>
 					</td>
 				</tr>
@@ -85,27 +85,27 @@
 	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
 
 	<script type="text/javascript">
-	//搜索功能
-	$("#search").click(function(){
-		var url = $(this).attr('url');
-        var query  = $('.search-form').find('input').serialize();
-        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
-        query = query.replace(/^&/g,'');
-        if( url.indexOf('?')>0 ){
-            url += '&' + query;
-        }else{
-            url += '?' + query;
-        }
-		window.location.href = url;
-	});
-	//回车搜索
-	$(".search-input").keyup(function(e){
-		if(e.keyCode === 13){
-			$("#search").click();
-			return false;
-		}
-	});
-    //导航高亮
-    highlight_subnav('{:U(CONSTROLLER_NAME.'/'.ACTION_NAME)}');
+		//搜索功能
+		$("#search").click(function(){
+			var url = $(this).attr('url');
+			var query  = $('.search-form').find('input').serialize();
+			query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+			query = query.replace(/^&/g,'');
+			if( url.indexOf('?')>0 ){
+				url += '&' + query;
+			}else{
+				url += '?' + query;
+			}
+			window.location.href = url;
+		});
+		//回车搜索
+		$(".search-input").keyup(function(e){
+			if(e.keyCode === 13){
+				$("#search").click();
+				return false;
+			}
+		});
+		//导航高亮
+		highlight_subnav('{:U(CONSTROLLER_NAME.'/'.ACTION_NAME)}');
 	</script>
 </block>

@@ -51,7 +51,8 @@
 						</eq>
 					</td>
 					<td>
-						<a href="{:U('Class/changeStatus?method=change&id='.$vo['id'])}" class="ajax-get">编辑</a>
+						<a href="{:U('User/student?class='.$vo['id'])}">查看</a>
+						<a href="{:U('Class/changeStatus?id='.$vo['id'])}">编辑</a>
 						<a href="{:U('Class/changeStatus?method=delete&id='.$vo['id'])}" class="confirm ajax-get">删除</a>
 					</td>
 				</tr>

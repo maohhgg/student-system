@@ -2,31 +2,31 @@
 
 <block name="body">
     <div class="main-title">
-        <h2>新增用户</h2>
+        <h2>{$meta_title|default="用户管理"}</h2>
     </div>
     <form action="{:U()}" method="post" class="form-horizontal">
         <div class="form-item">
             <label class="item-label">用户名<span class="check-tips">（用户名会作为默认的昵称）</span></label>
             <div class="controls">
-                <input type="text" class="text input-large" name="name" value="">
+                <input type="text" id="select-name" class="text input-large" name="name" value="">
             </div>
         </div>
         <div class="form-item">
             <label class="item-label">密码<span class="check-tips">（用户密码不能少于6位）</span></label>
             <div class="controls">
-                <input type="password" class="text input-large" name="password" value="">
+                <input type="text" class="text input-large" name="password" value="">
             </div>
         </div>
         <div class="form-item">
             <label class="item-label">确认密码</label>
             <div class="controls">
-                <input type="password" class="text input-large" name="repassword" value="">
+                <input type="text" class="text input-large" name="repassword" value="">
             </div>
         </div>
          <div class="form-item">
             <label class="item-label" id="type">用户身份</label>
             <div class="controls">
-                <select id="selectType" name="type" class="input-large">   
+                <select id="select-type" name="type" class="input-large">   
                     <option value="0">管理员</option>   
                     <option value="1">教师</option>   
                     <option value="2">学生</option>   
@@ -36,13 +36,13 @@
         <div class="form-item">
             <label class="item-label" id="uid">工号<span class="check-tips">（教师的工作号）</span></label>
             <div class="controls">
-                <input type="text" class="text input-large" name="uid" value="">
+                <input type="text" id="select-uid" class="text input-large" name="uid" value="">
             </div>
         </div>
         <div class="form-item classID" style="display: none;">
             <label class="item-label">专业</label>
             <div class="controls">
-                <select id="selectDepar" class="input-large">   
+                <select id="select-depar" class="input-large">   
                      <volist name="_department" id="vo">
                         <option value="{$i - 1}">{$vo}</option>   
                     </volist> 
@@ -52,7 +52,7 @@
         <div class="form-item classID" style="display: none;">
             <label class="item-label">班级<span class="check-tips">（学生所在班级）</span></label>
             <div class="controls">
-                <select id="selectClass" name='cid' class="input-large">   
+                <select id="select-class" name='cid' class="input-large">   
                     <!-- <option value=""></option> -->
                 </select> 
             </div>
@@ -66,13 +66,19 @@
         <div class="form-item">
             <label class="item-label" id="status">状态</label>
             <div class="controls">
-                <select id="selectStatus" name="status" class="input-large">   
+                <select id="select-status" name="status" class="input-large">   
                     <option value="-1">毕业</option>   
                     <option value="0">离职</option>   
                     <option value="1" selected="selected">在职</option>   
                     <option value="2">在读</option>   
                     <option value="3">请假中..</option>   
                 </select>   
+            </div>
+        </div>
+        <div class="form-item hidden">
+            <label class="item-label" id="date"></label>
+            <div class="controls">
+                <input type="text" class="text input-large" name="id" value="{$_user.id|default=''}">
             </div>
         </div>
         <div class="form-item">
@@ -85,7 +91,7 @@
 <block name="script">
     <script type="text/javascript">
         //导航高亮
-        highlight_subnav('{:U(CONSTROLLER_NAME.'/'.ACTION_NAME)}');
+        highlight_subnav('{:U("User/add")}');
 
 
         // 检查对html5的支持
@@ -107,46 +113,85 @@
         $('#date').html(c.d);
 
         // 对不同的用户有不同的提示
-        $("#selectType").bind("change", function(){
+        $("#select-type").bind("click", function(){
             if($(this).val() == 2){
                 $('#uid').html(c.a);
                 $('#date').html(c.b);
-                $("#selectStatus option[value='"+2+"']").attr("selected",true);
+                $("#select-status option[value='"+2+"']").attr("selected",true);
                 $('.classID').show();
             } else {
+                $("#select-class").html("");
                 $('#uid').html(c.c);
                 $('#date').html(c.d);
-                $("#selectStatus option[value='"+1+"']").attr("selected",true);
+                $("#select-status option[value='"+1+"']").attr("selected",true);
                 $('.classID').hide();
             }
         });
 
         // 自动获取班级信息
-        getClassDetail($("#selectDepar option:selected").text());
+        var N = {$_user.tid|default=-1};
+        var M = {$_user.id|default=-1};
+        if(N != -1 && M != -1){
+            getClassDetail(N);
+        } else if(N == -1 && M == -1) {
+            getClassDetail($("#select-depar option:selected").val());
+        }
+       
+        
 
-        $("#selectDepar").bind('change',function(){
+        $("#select-depar").bind('change',function(){
             var id = $(this).val();
             if(id){
                getClassDetail(id);
             }
         });
-        // 自动设置入学时间 
-        $("#selectClass")
 
+        // 自动设置入学时间 
         function getClassDetail(id){
              $.ajax({
                     method : 'POST',
                     url: '{:U("Class/index")}',
-                    data: 'id='+id,
+                    data: 'id='+id+'&all={$_user?"true":""}',
                     success : function(data){
-                        $("#selectClass").html("");
+                        $("#select-class").html("");
                         data.forEach(function(element) {
-                            $("#selectClass").append("<option value="+ element.id +">"+ element.text +"</option>")
+                            $("#select-class").append("<option value="+ element.id +">"+ element.text +"</option>")
                             $("#html5date").val(element.date);
                         }, this);
                         console.log(data);
                     }
             });
         }
+
+        var data = {
+            name : "{$_user.name|default=''}",
+            type : "{$_user.type|default=''}",
+            uid : "{$_user.uid|default=''}",
+            class : "{$_user.class|default=''}",
+            cid : "{$_user.cid|default=0}",
+            date : "{$_user.date|default=''}",
+            tid : "{$_user.tid|default=''}",
+            status : "{$_user.status|default=''}",
+        }
+       
+       
+
+        $(document).ready(function(){
+            if(data.name !== ''){
+                $("#select-name").val(data.name);
+                $("#select-type option[value="+data.type+"]").eq(0).attr("selected",true);
+                
+                $("#select-depar option").eq(data.tid).attr("selected",true);
+                if(data.cid === 0){
+                    $("#select-class").html("");
+                } else {
+                    $("#select-class option[value="+data.cid+"]").eq(0).attr("selected",true);
+                    $("#select-type").click();
+                }
+                $("#select-uid").val(data.uid);
+                $("#html5date").val(data.date);
+                $("#select-status option[value="+data.status+"]").eq(0).attr("selected",true);
+            }
+        });
     </script>
 </block>

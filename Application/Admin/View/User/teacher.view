@@ -45,8 +45,8 @@
                     <td>{$vo.date}</td>
                     <td>{$vo.status_text}</td>
                     <td>
-                        <a href="{:U('User/changeStatus?method=change&id='.$vo['id'])}" class="ajax-get">编辑</a>
-                        <a href="{:U('User/changeStatus?method=delete&id='.$vo['id'])}" class="confirm ajax-get">删除</a>
+                        <a href="{:U('User/changeStatus?id='.$vo['id'])}">编辑</a>
+                        <a href="{:U('User/changeStatus?method=delete&id='.$vo['id'].'&type='.$vo['type'])}" class="confirm ajax-get">删除</a>
                     </td>
                 </tr>
                 </volist>

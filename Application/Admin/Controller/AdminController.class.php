@@ -92,7 +92,7 @@ class AdminController extends Controller {
             unset($options['where']);
         }
         $options      =   array_merge( (array)$OPT->getValue($model), $options );
-        $total        =   $model->where($options['where'])->fetchSql(true)->count();
+        $total        =   $model->where($options['where'])->count();
 
         if( isset($REQUEST['r']) ){
             $listRows = (int)$REQUEST['r'];
@@ -104,8 +104,8 @@ class AdminController extends Controller {
             $page->setConfig('theme','%FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END% %HEADER%');
         }
         $p->lastSuffix = false;
-        $p =$page->show();
-        $this->assign('_page', $p? $p: '');
+        $p = $page->show();
+        $this->assign('_page', $p ? $p: '');
         $this->assign('_total',$total);
         $options['limit'] = $page->firstRow.','.$page->listRows;
 

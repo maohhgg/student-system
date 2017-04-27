@@ -4,11 +4,15 @@ use Admin\Api\ClassApi;
 
 class ClassController extends AdminController{
 
-    public function index($id=''){
+    public function index($id='', $all = ""){
         $class  =  new ClassApi;
         if(IS_POST){
             /* 调用接口获取班级信息 */
-            $list = $this->lists('Class',['type'=>$id,'status'=>1]);
+            $map['type'] = $id;
+            if($all !== 'true'){
+                $map['status'] = 1;
+            }
+            $list = $this->lists('Class',$map);
             // print_r($list);
             if(!empty($list)){
                 $list = $class->merge($list,array_keys(C('DEPARTMENT'))); 
@@ -20,6 +24,63 @@ class ClassController extends AdminController{
         $this->assign('_list', $list);
         $this->meta_title = '班级管理';
         $this->display();
+    }
+
+    /**
+     * 状态修改
+     */
+    public function changeStatus($method=null, $id='', $grade='', $name='', $no='', $date='', $type='', $status=''){
+        if(empty($method) && !IS_POST){
+            $id = I('id');
+            $api = new ClassApi;
+            $class = $api->info($id,false);
+            $this->assign("_department",C('DEPARTMENT'));
+            $this->assign("_class",$class);
+            $this->meta_title = '班级管理';
+            $this->display('add');
+        } else if(IS_POST && $id) {
+            $class   =   new ClassApi;
+             $data = [
+                'grade' => $grade,
+                'name' => $name,
+                'no' => $no,
+                'date' => $date,
+                'type' => $type,
+                'status' => $status,
+            ];
+            foreach($data as $key => $v){
+                if (empty($v)) {
+                    unset($data[$key]); //删除空的属性
+                }
+            }
+            $uid    =   $class->updateInfo($id,$data);
+            if(0 < $uid){ //修改成功
+                $this->success('修改成功！',U('index'));
+            } else { //修改失败，显示错误信息
+                $this->error($this->showRegError($uid));
+            }
+        } else {
+            $id = array_unique((array)I('id',0));
+
+            $id = is_array($id) ? implode(',',$id) : $id;
+            if ( empty($id) ) {
+                $this->error('请选择要操作的数据!');
+            }
+            $map['uid'] =   array('in',$id);
+            switch ( strtolower($method) ){
+                case 'forbid':
+                    $this->forbid('Member', $map );
+                    break;
+                case 'update':
+                    $this->resume('Member', $map );
+                    break;
+                case 'delete':
+                    $this->delete('Member', $map );
+                    break;
+                default:
+                    $this->error('参数非法');
+            }
+        }
     }
 
     public function add($grade='', $name='', $no='', $date='', $type='', $status=''){

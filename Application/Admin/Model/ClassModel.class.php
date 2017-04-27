@@ -61,39 +61,65 @@ class ClassModel extends Model{
 		}
     }
 
-	 /**
+	/**
 	 * 获取班级信息
 	 * @param  string  $id         班级id
+	 * @param  string  $merge      是否启用美化
 	 * @return string             班级信息 2017届软件工程四班
 	 */
-	public function info($id){
+	public function info($id,$merge = true){
 		$map = ['id' => $id];
 		$class = $this->where($map)->field('id,grade,name,no,date,type,status')->find();
 		if(is_array($class)){
-			return $this->merge($class);
+			if($merge){
+				return $this->merge($class);
+			} else {
+				return $class;
+			};
 		} else {
 			return -1; //用户不存在或被禁用
 		}
     }
 
+	/**
+	 * 更新班级信息
+	 * @param int $id 班级id
+	 * @param array $data 修改的字段数组
+	 * @return true 修改成功，false 修改失败
+	 */
+	public function updateClassFields($id, $data){
+		if(empty($id) || empty($data)){
+			$this->error = '参数错误！';
+			return false;
+		}
+		$data = $this->create($data,Model::MODEL_UPDATE);
+		if($data){
+			return $this->where(array('id'=>$id))->save($data);
+		}
+		return false;
+	}
+
 	/* 使Class信息更有可读性 */
 	public function merge($map,$array = []){
 		if(count($map) == count($map, 1)){
-			$map['text'] = "{$map['grade']}届{$map['name']}{$this->cenvt($map['no'])}班";
+			$this->replace($map);
 			if(!empty($array)){
 				$map['type'] = $array[$map['type']];
 			}
 		} else if(empty($array)){
 			foreach($map as $key => $v){
-				$map[$key]['text'] = "{$v['grade']}届{$v['name']}{$this->cenvt($v['no'])}班";
+				$this->replace($map[$key]);
 			}
 		} else {
 			foreach($map as $key => $v){
-				$map[$key]['text'] = "{$v['grade']}届{$v['name']}{$this->cenvt($v['no'])}班";
+				$this->replace($map[$key]);
 				$map[$key]['type'] = $array[$v['type']];
 			}
 		}
 		return $map;
+	}
+	public function replace(&$map){
+		$map['text'] = "{$map['name']}专业 {$map['grade']}级{$this->cenvt($map['no'])}班";
 	}
 
 	/* 将数字转化为汉字 */

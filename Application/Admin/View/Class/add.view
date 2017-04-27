@@ -1,7 +1,7 @@
 <extend name="Public/base"/>
 <block name="body">
     <div class="main-title">
-        <h2>新增班级</h2>
+        <h2>{$meta_title|default="班级管理"}</h2>
     </div>
     <form action="{:U()}" method="post" class="form-horizontal">
         <div class="form-item">
@@ -17,7 +17,7 @@
         <div class="form-item">
             <label class="item-label">专业名称</label>
             <div class="controls">
-                <select name="name" class="input-large">
+                <select id="selectName" name="name" class="input-large">
 
                 <volist name="_department" id="vo" key="key">
                      <?php $tmp = $key; ?>
@@ -44,16 +44,22 @@
         <div class="form-item">
             <label class="item-label">第几班</label>
             <div class="controls">
-                <input type="text" class="text input-large" name="no" value="">
+                <input type="text" id="no" class="text input-large" name="no" value="">
             </div>
         </div>
         <div class="form-item">
             <label class="item-label">状态</label>
             <div class="controls">
-               <select name="status" class="input-large" >
-                   <option value="1" selected="selected">正常</option>
-                   <option value="0">已毕业</option>
+                <select id="status" name="status" class="input-large" >
+                    <option value="0">已毕业</option>
+                    <option value="1" selected="selected">正常</option>
                </select>
+            </div>
+        </div>
+        <div class="form-item hidden">
+            <label class="item-label" id="date"></label>
+            <div class="controls">
+                <input type="text" class="text input-large" name="id" value="{$_class.id|default=''}">
             </div>
         </div>
         <div class="form-item">
@@ -66,7 +72,7 @@
 <block name="script">
     <script type="text/javascript">
         //导航高亮
-        highlight_subnav('{:U(CONSTROLLER_NAME.'/'.ACTION_NAME)}');
+        highlight_subnav('{:U("Class/add")}');
 
         // 检查对html5的支持
         var i = document.getElementById('html5date');
@@ -97,6 +103,28 @@
             $('.department-option').hide();
             $('.'+$("#selectType option:selected").text()).show();
             $('.'+$("#selectType option:selected").text()).eq(0).attr("selected",true);
+        });
+
+        var data = {
+            type : "{$_class.type|default=''}",
+            name : "{$_class.name|default=''}",
+            date : "{$_class.date|default=''}",
+            grade : "{$_class.grade|default=''}",
+            no : "{$_class.no|default=''}",
+            status : "{$_class.status|default=''}",
+        }
+
+        $(document).ready(function(){
+            if(data.name !== ''){
+                $("#selectType option").eq(data.type).attr("selected",true);
+                $('.department-option').hide();
+                $('.'+$("#selectType option:selected").text()).show();
+                $('#selectName option[value='+data.name+']').eq(0).attr("selected",true);
+                $('#html5date').val(data.date);
+                $('#grade').val(data.grade);
+                $('#no').val(data.no);
+                $('#status option').eq(data.status).attr("selected",true);
+            }
         });
     </script>
 </block>
