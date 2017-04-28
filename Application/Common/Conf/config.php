@@ -7,8 +7,6 @@
 return array(
     /* 模块相关配置 */
     'DEFAULT_MODULE'     => 'Home',
-    'MODULE_DENY_LIST'   => array('Common', 'User'),
-    //'MODULE_ALLOW_LIST'  => array('Home','Admin'),
 
 	/* 模板文件的默认后缀 */
 	'TMPL_TEMPLATE_SUFFIX'=>'.view',
@@ -23,8 +21,6 @@ return array(
     'VAR_URL_PARAMS'       => '', // PATHINFO URL参数变量
     'URL_PATHINFO_DEPR'    => '/', //PATHINFO URL分割符
 
-    /* 全局过滤配置 */
-    'DEFAULT_FILTER' => '', //全局过滤函数
 
     /* 数据库配置 */
     'DB_TYPE'   => 'mysqli', // 数据库类型

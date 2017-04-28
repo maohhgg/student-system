@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{$meta_title|default=C("WEB_SITE_TITLE")}</title>
+    <link href="__STATIC__/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="__CSS__/main.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="__STATIC__/bootstrap/js/html5shiv.js"></script>
+    <![endif]-->
+    <block name="style"></block>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="__STATIC__/jquery-1.10.2.min.js"></script>
+    <![endif]-->
+    <!--[if gte IE 9]><!-->
+    <script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/bootstrap/js/bootstrap.min.js"></script>
+    <!--<![endif]-->
+
+</head>
+
+<body>
+    <!-- 头部 -->
+    <!-- 导航条
+    ================================================== -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+                <a class="navbar-brand" href="{:U('index/index')}">{:C('WEB_SITE_TITLE')}</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <volist name="nav" id="n">
+                        <li><a href="{$n.url|U}" target="<eq name='n.target' value='1'>_blank<else/>_self</eq>">{$n.title}</a></li>
+                    </volist>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <if condition="is_login()">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{:get_username()} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{:U('User/profile')}">修改密码</a></li>
+                                <li><a href="{:U('User/logout')}">退出</a></li>
+                            </ul>
+                        </li>
+                        <else/>
+                        <li><a href="{:U('User/login')}">登录</a></li>
+                        <li><a href="{:U('User/register')}" style="padding-left:0;padding-right:0">注册</a></li>
+                    </if>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </nav>
+
+
+    <!-- /头部 -->
+
+    <!-- 主体 -->
+    <block name="header"></block>
+    <div id="main-container" class="container">
+        <div class="row">
+            <block name="side">
+                <!-- 左侧 nav
+            ================================================== -->
+                <div class="col-md-3 bs-docs-sidebar">
+                    <block name="publish"></block>
+
+                    <div class="list-group">
+                        {:W('Category/lists', array("current" => $current))}
+                    </div>
+                </div>
+            </block>
+            <block name="body"></block>
+        </div>
+    </div>
+
+
+    <!-- /主体 -->
+
+    <!-- 底部 -->
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted"> 版权所有 © <strong><a href="http://google.com" target="_blank">Nobody</a></strong> </p>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+        (function () {
+            var ThinkPHP = window.Think = {
+                "ROOT": "__ROOT__", //当前网站地址
+                "APP": "__APP__", //当前项目地址
+                "PUBLIC": "__PUBLIC__", //项目公共目录地址
+                "DEEP": "{:C('URL_PATHINFO_DEPR')}", //PATHINFO分割符
+                "MODEL": ["{:C('URL_MODEL')}", "{:C('URL_CASE_INSENSITIVE')}", "{:C('URL_HTML_SUFFIX')}"],
+                "VAR": ["{:C('VAR_MODULE')}", "{:C('VAR_CONTROLLER')}", "{:C('VAR_ACTION')}"]
+            }
+        })();
+    </script>
+    <block name="script"></block>
+    <!-- 用于加载js代码 -->
+    <div class="hidden">
+        <!-- 用于加载统计代码等隐藏元素 -->
+        <block name="hidden"></block>
+    </div>
+
+    <!-- /底部 -->
+</body>
+
+</html>

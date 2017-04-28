@@ -30,16 +30,6 @@ function data_auth_sign($data) {
 }
 
 /**
- * 处理插件钩子
- * @param string $hook   钩子名称
- * @param mixed $params 传入参数
- * @return void
- */
-function hook($hook,$params=array()){
-    \Think\Hook::listen($hook,$params);
-}
-
-/**
  * 动态扩展左侧菜单,base.html里用到
  */
 function extra_menu($extra_menu,&$base_menu){
@@ -50,4 +40,24 @@ function extra_menu($extra_menu,&$base_menu){
             $base_menu['child'][$key] = $group;
         }
     }
+}
+
+/**
+ * 根据用户ID获取用户名
+ * @param  integer $uid 用户ID
+ * @return string       用户名
+ */
+function get_username($uid = 0){
+    if(!($uid && is_numeric($uid))){ //获取当前登录用户名
+        return session('user_auth.name');
+    }
+    /* 查找用户信息 */
+    $User = new User\Api\UserApi();
+    $info = $User->info($uid);
+    if($info){
+        $name =  $info['name'];
+    } else {
+        $name = '';
+    }
+    return $name;
 }

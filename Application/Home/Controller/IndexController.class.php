@@ -1,9 +1,14 @@
 <?php
-// 本类由系统自动生成，仅供测试用途
+
 namespace Home\Controller;
-use Think\Controller;
-class IndexController extends Controller {
+
+class IndexController extends HomeController {
+
     public function index(){
-        $this->show("前台");
+        $lists = D('Question')->lists(null);
+        $api = new \Home\Api\QuestionApi();
+        $lists = $api->int_to_string($lists);
+        $this->assign('lists',$lists);//列表
+        $this->display();
     }
 }

@@ -1,0 +1,37 @@
+<extend name="Base/common"/>
+
+<block name="header">
+    <div class="jumbotron bs-docs-header" id="content">
+        <div class="container">
+            <h2>欢迎你！ {:strtoupper(get_username())}</h2>
+        </div>
+    </div>
+</block>
+
+<block name="body">
+    <div class="col-md-9">
+        <!-- Contents
+        ================================================== -->
+        <section id="contents">
+            <volist name="lists" id="article">
+                <div class="">
+                    <h3><a href="{:U('Article/detail?id='.$article['id'])}">{$article.title}</a></h3>
+                </div>
+                <div>
+                    <p class="lead">{$article.description}</p>
+                </div>
+                <div>
+                    <span><a href="{:U('Article/detail?id='.$article['id'])}">查看全文</a></span>
+                    <span class="pull-right">
+                        <a href="{:U('Article/course?cctid='.($article['cctid']))}">{$article.course}</a>
+                        <span class="author">{$article.teacher}</span>老师
+                        <span>在 {$article.date}</span> 发表
+                    <span>
+                        
+                </div>
+                <hr/>
+            </volist>
+
+        </section>
+    </div>
+</block>

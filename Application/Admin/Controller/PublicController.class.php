@@ -28,6 +28,7 @@ class PublicController extends \Think\Controller {
                 $auth = array(
                     'id'       => $user['id'],
                     'name'     => $user['name'],
+                    'type'     => $user['type'],
                 );
 
                 session('user_auth', $auth);
@@ -62,9 +63,5 @@ class PublicController extends \Think\Controller {
         }
     }
 
-    public function verify(){
-        $verify = new \Think\Verify();
-        $verify->entry(1);
-    }
 
 }

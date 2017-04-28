@@ -29,10 +29,19 @@ class CCTApi extends Api{
     /**
 	 * 获取课程信息
 	 * @param  string  $id         课程id
-	 * @return string             课程信息 
+	 * @param  string  $class       id是否为班级id
+	 * @return array             课程信息 
 	 */
-	public function info($id){
-        return $this->model->info($id);
+	public function info($id,$class=false){
+        return $this->model->info($id,$class);
+    }
+    /**
+	 * 获取课程信息
+	 * @param  array  $map         课程id
+	 * @return array             课程信息 
+	 */
+	public function lists($map=array()){
+        return $this->int_2_string($this->model->lists($map));
     }
 
      /**
@@ -55,10 +64,11 @@ class CCTApi extends Api{
          if($data['class'] && $data['course'] && $data['teacher'] ){
              $user = new \User\Api\UserApi;
              $course = new CourseApi;
-
+             $class = new ClassApi; 
+             $data['class'] = $class->info($data['class'])['text'];
              $data['course'] = $course->info($data['course'])['name'];
              $data['teacher'] = $user->info($data['teacher'])['name'];
-             $data['date'] =  $data['start']." 到 ". $data['start'];
+             $data['expiry'] =  $data['start']." 到 ". $data['start'];
          }
          return $data;
      }

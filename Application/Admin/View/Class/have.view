@@ -41,7 +41,7 @@
 					<td>{$vo.id} </td>
 					<td>{$vo.course}</td>
 					<td>{$vo.teacher}</td>
-					<td>{$vo.date}</td>
+					<td>{$vo.expiry}</td>
 					<td>
 						<eq name="vo.status" value="1">
 							正在开课

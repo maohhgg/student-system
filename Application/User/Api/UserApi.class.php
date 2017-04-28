@@ -73,5 +73,31 @@ class UserApi extends Api{
         }
         return $return;
     }
+    /**
+     * 得到这个学生班级所有的课程
+     *
+     */
+    public function getCourse($id = ''){
+        if(empty($id)){
+            return false;
+        }
+        $class = new \Admin\Api\ClassApi;
+        $user = $this->info($id);
+        return $class->getCourse($user['cid']);
+    }
+
+    /**
+     * 得到用
+     *
+     */
+    public function getQuestion($id = '', $cctid = ''){
+        if(empty($id)){
+            return 0;
+        }
+        $class = new \Admin\Api\ClassApi;
+        if(empty($cctid)) {
+
+        }
+    }
 
 }

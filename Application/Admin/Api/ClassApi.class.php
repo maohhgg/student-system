@@ -56,6 +56,23 @@ class ClassApi extends Api{
         }
         return $return;
     }
+    /**
+     * 得到这个班级所有的课程
+     *
+     */
+    public function getCourse($id = ''){
+        if(empty($id)){
+            return false;
+        }
+        $cct = new CCTApi;
+        $list = $cct->info($id,true);
+        if($list){
+            $list = $cct->int_2_string($list);
+            return $list;
+        } else {
+            return false;
+        }
+    }
 
     /**
      *  对包含学生的数组进行班级id对班级信息的转换
@@ -89,4 +106,6 @@ class ClassApi extends Api{
         }
         return $data;
     }
+
+
 }

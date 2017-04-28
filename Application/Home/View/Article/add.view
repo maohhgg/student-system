@@ -1,0 +1,81 @@
+<extend name="Base/common" />
+<block name="style">
+    <link rel="stylesheet" href="__STATIC__/summernote/summernote.css">
+    <link rel="stylesheet" href="__STATIC__/fileinput/css/fileinput.min.css">
+</block>
+<block name="header">
+    <header class="jumbotron bs-docs-header" id="overview">
+        <div class="container">
+            <h2>发布新的作业了</h2>
+        </div>
+    </header>
+</block>
+<block name="side">
+</block>
+<block name="body">
+    <div class="col-md-12 main-content">
+        <form class="row" action="{:U('')}" method="post">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>班级</label>
+                    <select class="form-control">
+                        <volist name="class" id="v">
+                             <option value="{$v.id}">{$v.class}</option>
+                        </volist>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>作业具体内容</label>
+                    <div id="summernote"></div>
+                </div>
+                
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>作业问题文件</label>
+                    <input id="question" type="file" class="file">
+                </div>
+                <div class="form-group">
+                    <label>答案文件</label>
+                    <input id="answer" type="file" class="file">
+                </div>
+                <div class="form-group">
+                    <label>简要描述</label>
+                    <textarea class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </form>
+    </div>
+</block>
+<block name="script">
+    <script type="text/javascript" src="__STATIC__/summernote/summernote.js"></script>
+    <script type="text/javascript" src="__STATIC__/summernote/summernote-zh-CN.js"></script>
+    <script type="text/javascript" src="__STATIC__/fileinput/js/fileinput.min.js"></script>
+    <script type="text/javascript">
+        $("#question").fileinput({
+            language: 'zh',
+            uploadUrl: "{:U('file/upload')}",
+            showPreview: false,
+            showRemove: false,
+        });
+        $("#answer").fileinput({
+            language: 'zh',
+            uploadUrl: "{:U('file/upload')}",
+            showPreview: false,
+            showRemove: false,
+        });
+        $(document).ready(function () {
+
+            $('#summernote').summernote({
+                lang: 'zh-CN',
+                height: 500, // set editor height
+                minHeight: null, // set minimum height of editor
+                maxHeight: null, // set maximum height of editor
+                focus: true
+            });
+        })
+    </script>
+</block>

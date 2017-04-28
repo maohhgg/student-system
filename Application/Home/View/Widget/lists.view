@@ -1,0 +1,8 @@
+<volist name="category" id="cate">
+	
+	<eq name="current" value="$cate['id']">
+		<a href="{:U('Article/course?cctid='.$cate['id'])}" class="list-group-item active">{$cate.course}</a> 
+	<else/>
+		<a href="{:U('Article/course?cctid='.$cate['id'])}" class="list-group-item" >{$cate.course} </a>
+	</eq>
+</volist>

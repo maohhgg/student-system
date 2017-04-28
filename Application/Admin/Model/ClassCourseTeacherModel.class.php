@@ -61,9 +61,22 @@ class ClassCourseTeacherModel extends Model{
 	 * @param  string  $id         课程id
 	 * @return string             课程信息 
 	 */
-	public function info($id){
-		$map = ['id' => $id];
-		$data= $this->where($map)->field('id,class,course,teacher,start,end,status')->find();
+	public function info($id,$class=false){
+		if($class){
+			$map = ['class' => $id];
+			$data= $this->where($map)->select();
+		} else {
+			$map = ['id' => $id];
+			$data= $this->where($map)->find();
+		}
+		if(is_array($data)){
+			return $data;
+		} else {
+			return -1; //用户不存在或被禁用
+		}
+    }
+	public function lists($map = []){
+		$data = $this->where($map)->select();
 		if(is_array($data)){
 			return $data;
 		} else {
