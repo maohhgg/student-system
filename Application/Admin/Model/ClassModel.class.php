@@ -19,7 +19,7 @@ class ClassModel extends Model{
     protected $connection = DB_CONFIG;
 
 
-	/* 用户模型自动验证 */
+	/* 模型自动验证 */
 	protected $_validate = array(
 		array('type', [0,1,2,3], -1, self::EXISTS_VALIDATE, 'in'), // 所属系部不存在
 		array('name', '1,20', -2, self::EXISTS_VALIDATE, 'length'),  // 专业名不合法
@@ -40,7 +40,7 @@ class ClassModel extends Model{
      * @param  string $date     开学时间
 	 * @param  string $type     所属系
 	 * @param  string $status    班级状态  0 已毕业  1正常
-     * @return integer          添加成功-班级id，注册失败-错误编号
+     * @return integer          添加成功-班级id，添加失败-错误编号
      */
 	public function insert($grade, $name, $no, $date, $type, $status){
         $data = [
@@ -55,7 +55,7 @@ class ClassModel extends Model{
 		/* 新增 */
 		if($this->create($data)){
 			$id = $this->add();
-			return $id ? $id : 0; //0-未知错误，大于0-注册成功
+			return $id ? $id : 0; //0-未知错误，大于0-添加成功
 		} else {
 			return $this->getError(); //错误详情见自动验证注释
 		}

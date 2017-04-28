@@ -106,6 +106,6 @@
 			}
 		});
 		//导航高亮
-		highlight_subnav('{:U(CONSTROLLER_NAME.'/'.ACTION_NAME)}');
+		highlight_subnav('{:U("User/Index")}');
 	</script>
 </block>

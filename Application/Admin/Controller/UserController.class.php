@@ -70,17 +70,17 @@ class UserController extends AdminController {
         $this->display();
     }
     public function student(){
+        $class = new ClassApi();
         $map['type'] = 2;
-        $class = I('class');
-        if(!empty($class)){
-            $map['cid'] = $class;
+        $id = I('class');
+        if(!empty($id)){
+            $map['cid'] = $id;
+            $this->meta_title = $class->info($id)['text'].'    学生列表';
         }
         $list = $this->lists('User',$map);
         int_to_string($list);
-        $class = new ClassApi();
         $list = $class->int_2_string($list);
         $this->assign('_list', $list);
-        $this->meta_title = '学生管理';
         $this->display();
     }
     /**

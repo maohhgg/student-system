@@ -1,0 +1,70 @@
+<extend name="Public/base" />
+
+<block name="body">
+    <div class="main-title">
+        <h2>{$meta_title|default="班级管理"}</h2>
+    </div>
+    <form action="{:U()}" method="post" class="form-horizontal">
+        <div class="form-item">
+            <label class="item-label">所属班级</label>
+            <div class="controls">
+                <select id="selectType" name="class" class="input-large">
+                    <option value="{$_cid}">{$_class}</option>   
+                </select>   
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label">所选课程</label>
+            <div class="controls">
+                <select id="selectName" name="course" class="input-large">
+
+                <volist name="_course" id="vo" key="key">
+                    <option value="{$key}" >{$vo.name}</option>  
+                </volist>
+
+                </select>   
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label">任教老师</label>
+            <div class="controls">
+                <select id="selectName" name="teacher" class="input-large">
+
+                <volist name="_teacher" id="vo" key="key">
+                    <option value="{$vo.id}" >{$vo.name}</option>  
+                </volist>
+
+                </select>   
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label" id="date">设立的时间范围</label>
+            <div class="controls">
+                <input type="date" style="width:174px" class="text " name="start" value="">
+                到
+                <input type="date" style="width:174px" class="text " name="end" value="">
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="item-label">状态</label>
+            <div class="controls">
+                <select id="status" name="status" class="input-large" >
+                    <option value="0">已结业</option>
+                    <option value="1" selected="selected">正常</option>
+               </select>
+            </div>
+        </div>
+        <div class="form-item">
+            <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+            <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+        </div>
+    </form>
+</block>
+
+
+<block name="script">
+    <script type="text/javascript">
+         //导航高亮
+        highlight_subnav('{:U("Class/have")}');
+    </script>
+</block>

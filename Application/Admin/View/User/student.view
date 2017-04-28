@@ -3,7 +3,7 @@
 <block name="body">
 	<!-- 标题栏 -->
 	<div class="main-title">
-		<h2>用户列表</h2>
+		<h2>{$meta_title|default='学生列表'}</h2>
 	</div>
 	<div class="cf">
 		<div class="fl">
@@ -89,7 +89,7 @@
 		}
 	});
     //导航高亮
-    highlight_subnav('{:U(CONSTROLLER_NAME.'/'.ACTION_NAME)}');
+    highlight_subnav('{:U("User/student")}');
 	</script>
 </block>
 

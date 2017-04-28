@@ -1,13 +1,12 @@
 <extend name="Public/base" />
-
 <block name="body">
-	<!-- 标题栏 -->
-	<div class="main-title">
-		<h2>所有班级</h2>
-	</div>
-	<div class="cf">
+    <div class="main-title">
+        <h2>{$meta_title|default="所有课程"}</h2>
+    </div>
+
+    <div class="cf">
 		<div class="fl">
-            <a class="btn" href="{:U('Class/add')}">新 增</a>
+            <a class="btn" href="{:U('Class/classcourse?id='.$cid)}">新 增</a>
             <button class="btn ajax-post confirm" url="{:U('Class/changeStatus',array('method'=>'delete'))}" target-form="ids">删 除</button>
         </div>
 
@@ -27,9 +26,9 @@
 				<tr>
 					<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
 					<th class="">ID</th>
-					<th class="">名称</th>
-					<th class="">系别</th>
-					<th class="">班级设立时间</th>
+					<th class="">课程名</th>
+					<th class="">教师</th>
+					<th class="">开设时间段</th>
 					<th class="">状态</th>
 					<th class="">操作</th>
 				</tr>
@@ -40,19 +39,17 @@
 				<tr>
 					<td><input class="ids" type="checkbox" name="id[]" value="{$vo.uid}" /></td>
 					<td>{$vo.id} </td>
-					<td>{$vo.text}</td>
-					<td>{$vo.type}</td>
+					<td>{$vo.course}</td>
+					<td>{$vo.teacher}</td>
 					<td>{$vo.date}</td>
 					<td>
 						<eq name="vo.status" value="1">
-							在校
+							正在开课
 						<else/>
-							已毕业
+							已结业
 						</eq>
 					</td>
 					<td>
-						<a href="{:U('Class/have?class='.$vo['id'])}">查看课程</a>
-						<a href="{:U('User/student?class='.$vo['id'])}">学生信息</a>
 						<a href="{:U('Class/changeStatus?id='.$vo['id'])}">编辑</a>
 						<a href="{:U('Class/changeStatus?method=delete&id='.$vo['id'])}" class="confirm ajax-get">删除</a>
 					</td>
@@ -71,30 +68,9 @@
 </block>
 
 <block name="script">
-	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+    <script type="text/javascript">
+        //导航高亮
+        highlight_subnav('{:U("Class/have")}');
 
-	<script type="text/javascript">
-	//搜索功能
-	$("#search").click(function(){
-		var url = $(this).attr('url');
-        var query  = $('.search-form').find('input').serialize();
-        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
-        query = query.replace(/^&/g,'');
-        if( url.indexOf('?')>0 ){
-            url += '&' + query;
-        }else{
-            url += '?' + query;
-        }
-		window.location.href = url;
-	});
-	//回车搜索
-	$(".search-input").keyup(function(e){
-		if(e.keyCode === 13){
-			$("#search").click();
-			return false;
-		}
-	});
-    //导航高亮
-    highlight_subnav('{:U(CONSTROLLER_NAME.'/'.ACTION_NAME)}');
-	</script>
+    </script>
 </block>

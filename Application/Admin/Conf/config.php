@@ -52,7 +52,7 @@ return array(
             'title'=>'班级',
             'url'=>'Class/index',
             'child' =>[
-                '班级管理' => [
+                '班级信息' => [
                     ['title'=>'所有班级','url'=>'Class/index'],
                     ['title'=>'班级课程','url'=>'Class/have'],
                 ],
@@ -61,7 +61,7 @@ return array(
                 ],
                 '课程管理' => [
                      ['title'=>'所有课程','url'=>'Class/course/'],
-                     ['title'=>'课程管理','url'=>'Class/course/methon/add'],
+                     ['title'=>'课程管理','url'=>'Class/course/?method=add'],
                 ]
             ],
         ],

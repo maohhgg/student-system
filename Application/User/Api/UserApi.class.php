@@ -61,13 +61,11 @@ class UserApi extends Api{
     /**
      * 更新用户信息
      * @param int $uid 用户id
-     * @param string $password 密码，用来验证
      * @param array $data 修改的字段数组
      * @return true 修改成功，false 修改失败
-     * @author huajie <banhuajie@163.com>
      */
-    public function updateInfo($uid, $password, $data){
-        if($this->model->updateUserFields($uid, $password, $data) !== false){
+    public function updateInfo($uid, $data){
+        if($this->model->updateUserFields($uid, $data) !== false){
             $return['status'] = true;
         }else{
             $return['status'] = false;

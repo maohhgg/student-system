@@ -1,6 +1,7 @@
 <?php
 namespace Admin\Controller;
 use Admin\Api\ClassApi;
+use Admin\Api\CCTApi;
 
 class ClassController extends AdminController{
 
@@ -82,6 +83,85 @@ class ClassController extends AdminController{
             }
         }
     }
+
+    public function have($method=null, $name='', $tag=''){
+        $class = new ClassApi();
+        $id = I('class');
+        if(!empty($id)){
+            $map['cid'] = $id;
+            $this->meta_title = $class->info($id)['text'].' 所有课程';
+            $list = $this->lists('ClassCourseTeacher',['class'=>$id]);
+            $cct = new CCTApi;
+            $list = $cct->int_2_string($list);
+            $this->assign("_list",$list);
+            $this->assign("cid",$id);
+            $this->display();
+        } else {
+            $this->redirect("Class/course");
+        }
+    }
+
+    public function course($method=null, $name='', $tag=''){
+        if(IS_POST){
+            $couser   =   new CouserApi;
+            $uid   =  $couser->insert($name, $tag);
+            if(is_numeric($uid)){ //注册成功
+                $this->success('添加成功！',U('index'));
+            } else {
+                $this->error($uid); //错误详情见自动验证注释
+            }
+        } else if(!empty($method)) {
+            $this->meta_title = '课程管理';
+            switch ( strtolower($method) ){
+                case 'add':
+                    $this->display('course_add');
+                break;
+                case 'delete':
+                    if(I('id')){
+                        M('Course')->delete(I('id'));
+                    }
+                    break;
+                default:
+                    $this->error('参数非法');
+            }
+            
+        } else {
+            $list = $this->lists('Course');
+            $this->assign('_list', $list);
+            $this->meta_title = '所有课程';
+            $this->display();
+        }
+       
+    }
+
+    public function classcourse($class='', $course='', $teacher='', $start='', $end='', $status=''){
+        if (IS_POST){
+            $cct = new CCTApi();
+            $uid = $cct->insert($class, $course, $teacher, $start, $end, $status);
+            if(is_numeric($uid)){ //注册成功
+                $this->success('添加成功！',U(''));
+            } else {
+                $this->error($uid); //错误详情见自动验证注释
+            }
+        }
+        $id = I('id');
+        if(!empty($id)){
+            $class = new ClassApi();
+            $class = $class->info($id)['text'];
+            $this->meta_title =  $class.' 添加课程';
+            $course = $this->lists('Course');
+            $this->assign('_course', $course);
+            $teacher = $this->lists('User',['type'=>1]);
+            $this->assign('_teacher', $teacher);
+            $this->assign('_cid', $id);
+            $this->assign("_class", $class);
+            $this->display();
+        } else {
+            $this->redirect("Class/course");
+        }
+       
+    }
+
 
     public function add($grade='', $name='', $no='', $date='', $type='', $status=''){
         if(IS_POST){

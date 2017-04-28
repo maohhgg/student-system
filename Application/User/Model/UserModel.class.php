@@ -135,25 +135,16 @@ class UserModel extends Model{
 	/**
 	 * 更新用户信息
 	 * @param int $id 用户id
-	 * @param string $password 密码，用来验证
 	 * @param array $data 修改的字段数组
 	 * @return true 修改成功，false 修改失败
-	 * @author huajie <banhuajie@163.com>
 	 */
-	public function updateUserFields($id, $password, $data){
-		if(empty($id) || empty($password) || empty($data)){
+	public function updateUserFields($id, $data){
+		if(empty($id) || empty($data)){
 			$this->error = '参数错误！';
 			return false;
 		}
-
-		//更新前检查用户密码
-		if(!$this->verifyUser($id, $password)){
-			$this->error = '验证出错：密码不正确！';
-			return false;
-		}
-
 		//更新用户信息
-		$data = $this->create($data);
+		$data = $this->create($data,Model::MODEL_UPDATE);
 		if($data){
 			return $this->where(array('id'=>$id))->save($data);
 		}
