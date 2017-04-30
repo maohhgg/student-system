@@ -40,3 +40,22 @@ body {
 .container .text-muted {
     margin: 20px 0;
 }
+.alert-content{
+    position: fixed;
+    left: 0;
+    width: 100%;
+    right: 0;
+    top: 100px;
+    z-index: 9999;
+}
+.text-right{
+    float: right;
+}
+h2 > .text-right{
+    color: #cdbfe3;
+    margin-top: 45px;
+}
+h3 > small{
+    font-size:10px;
+    line-height: 30px;
+}

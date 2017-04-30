@@ -38,7 +38,10 @@ class ClassApi extends Api{
 
     /* 使Class信息更有可读性 */
     public function merge($map,$array = []){
-        return $this->model->merge($map,$array);
+        if(!empty($map)){
+            return $this->model->merge($map,$array);
+        }
+        return false;
     }
 
     /**

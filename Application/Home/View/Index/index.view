@@ -15,7 +15,7 @@
         <section id="contents">
             <volist name="lists" id="article">
                 <div class="">
-                    <h3><a href="{:U('Article/detail?id='.$article['id'])}">{$article.title}</a></h3>
+                    <h3><a href="{:U('Article/detail?id='.$article['id'])}">{$article.title}</a> <small class="text-right">{$article.class}</small></h3>
                 </div>
                 <div>
                     <p class="lead">{$article.description}</p>
@@ -25,13 +25,15 @@
                     <span class="pull-right">
                         <a href="{:U('Article/course?cctid='.($article['cctid']))}">{$article.course}</a>
                         <span class="author">{$article.teacher}</span>老师
-                        <span>在 {$article.date}</span> 发表
+                        <small>在{$article.date}发布</small> 
                     <span>
                         
                 </div>
                 <hr/>
             </volist>
-
+            <div class="page">
+                {$page}
+            </div>
         </section>
     </div>
 </block>

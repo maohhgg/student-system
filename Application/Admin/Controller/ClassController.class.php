@@ -1,6 +1,7 @@
 <?php
 namespace Admin\Controller;
 use Admin\Api\ClassApi;
+use Admin\Api\CourseApi;
 use Admin\Api\CCTApi;
 
 class ClassController extends AdminController{
@@ -24,7 +25,7 @@ class ClassController extends AdminController{
         $list = $class->merge($list,array_keys(C('DEPARTMENT')));
         $this->assign('_list', $list);
         $this->meta_title = '班级管理';
-        $this->display();
+        $this->display(); 
     }
 
     /**
@@ -103,10 +104,10 @@ class ClassController extends AdminController{
 
     public function course($method=null, $name='', $tag=''){
         if(IS_POST){
-            $couser   =   new CouserApi;
+            $couser   =   new CourseApi;
             $uid   =  $couser->insert($name, $tag);
             if(is_numeric($uid)){ //注册成功
-                $this->success('添加成功！',U('index'));
+                $this->success('添加成功！',U('Class/course'));
             } else {
                 $this->error($uid); //错误详情见自动验证注释
             }
@@ -139,7 +140,7 @@ class ClassController extends AdminController{
             $cct = new CCTApi();
             $uid = $cct->insert($class, $course, $teacher, $start, $end, $status);
             if(is_numeric($uid)){ //注册成功
-                $this->success('添加成功！',U(''));
+                $this->success('添加成功！',U('Class/have?class='.$class));
             } else {
                 $this->error($uid); //错误详情见自动验证注释
             }

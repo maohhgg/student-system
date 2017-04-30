@@ -1,13 +1,15 @@
 <extend name="Base/common" />
-
+<block name="style">
+    <link rel="stylesheet" href="__STATIC__/fileinput/css/fileinput.min.css">
+</block>
 <block name="header">
     <header class="jumbotron bs-docs-header" id="overview">
         <div class="container">
-            <h2>{$info.title}</h2>
+            <h2>{$info.title} <small class="text-right">{$info.class}</small></h2>
             <p>
                 <span class="pull-left">
 					<span class="author">{$info.teacher}老师</span>
-                <span> 发表于 {$info.date}</span>
+                    <span> 在 {$info.date} 布置</span>
                 </span>
             </p>
         </div>
@@ -23,56 +25,109 @@
         <div class="bs-docs-section">
             <h4>文档下载</h4>
             <div class="btn-group" role="group" style="margin:10px 0;">
-                <button type="button" class="btn btn-default">计算机应用1班-问题描述.pdf</button>
-                <button type="button" class="btn btn-default" disabled="disabled">答案</button>
+                <empty name="file.question">
+                    <button type="button" class="btn btn-default" disabled="disabled">没有文件.doc</button>
+                <else /> 
+                    <a type="button" class="btn btn-default" download="{$file['question']['name']}" href="__UPLOAD__{$file['question']['path']}">{$file['question']['name']}</a>
+                </empty> 
+                <if condition="$info['answer'] eq 1">
+                    <a type="button" class="btn btn-default" download="{$file['answer']['name']}"  href="__UPLOAD__{$file['answer']['path']}">{$file['answer']['name']}</a>
+                <else /> 
+                    <button type="button" class="btn btn-default" disabled="disabled">{$file['answer']['name']|default="答案"}</button>
+                </if>
+               
             </div>
         </div>
         <hr/>
 
-        <div class="bs-docs-section">
+        <div class="bs-docs-section" style="width:300px">
             <h4 class="">作业上传</h4>
             <div class="btn-group" role="group" style="margin:10px 0;">
-                <button type="button" class="btn btn-default">上传文件</button>
+                <input id="upload-homework" type="file">
             </div>
         </div>
 
+        <br/>
         <div class="bs-docs-section">
             <div class="panel panel-default">
                 <!-- Default panel contents -->
                 <div class="panel-heading">已提交的作业</div>
-
-                <!-- Table -->
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Username</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <empty name="answer">
+                    <div class="panel-body">
+                        <span>还没有学生完成作业</span>
+                    </div>
+                <else/>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>学号</th>
+                                <th>姓名</th>
+                                <th>文件</th>
+                                <th>得分</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <volist name="answer" id="v">
+                                <tr>
+                                    <th scope="row">{$v.uid}</th>
+                                    <td>{$v.name}</td>
+                                    <td>{$v.file_name}</td>
+                                    <td>
+                                        <if condition="$v.score eq -1"> 老师还没有打分
+                                            <else /> {$v.score}
+                                        </if>
+                                    </td>
+                                </tr>
+                            </volist>
+                        </tbody>
+                    </table>
+                </empty>
             </div>
         </div>
     </div>
+</block>
+<block name="script">
+    <script type="text/javascript" src="__STATIC__/fileinput/js/fileinput.min.js"></script>
+    <script>
+        function initFileInput(ctrlName, uploadUrl) {
+            var control = $('#' + ctrlName);
+            control.fileinput({
+                language: 'zh',
+                uploadUrl: uploadUrl,
+                showPreview: false,
+                showRemove: false,
+            });
+        }
+        function initPortrait(ctrlName, cctid) {
+            var control = $('#' + ctrlName);
+            control.fileinput('refresh', {
+                uploadExtraData: {
+                    cctid: cctid,
+                },
+            });
+            control.on("fileuploaded", function (event, data) {
+                if (data.response) {
+                    $("#fi" + ctrlName).val(data.response.id);
+                    console.log($("#fi" + ctrlName).val());
+                    $.ajax({
+                        method:"post",
+                        url: "{:U('User/homework')}",
+                        data: 'afid='+data.response.id+"&qid={$info.id}",
+                        success:function(data){
+                            if(data.status == 1){
+                                updateAlert("成功上传了作业","alert-success");
+                                window.location.reload();
+                            } else {
+                                updateAlert(data.info,"alert-danger");
+                            }
+                        }
+                    })
+                }
+            });
+        }
+        initFileInput("upload-homework", "{:U('File/upload')}");
+        $("#upload-homework").click(function(){
+            initPortrait("upload-homework", '{$current}');
+        });
+    </script>
 </block>

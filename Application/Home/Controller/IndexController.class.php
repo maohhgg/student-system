@@ -5,10 +5,11 @@ namespace Home\Controller;
 class IndexController extends HomeController {
 
     public function index(){
-        $lists = D('Question')->lists(null);
-        $api = new \Home\Api\QuestionApi();
-        $lists = $api->int_to_string($lists);
-        $this->assign('lists',$lists);//列表
+        $list = $this->lists('Question',['cctid'=>['gt',0]]);
+
+        $api = new \Admin\Api\QuestionApi();
+        $list = $api->int_to_string($list);
+        $this->assign('lists',$list);// 赋值数据集
         $this->display();
     }
 }

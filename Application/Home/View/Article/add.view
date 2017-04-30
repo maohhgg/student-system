@@ -14,13 +14,18 @@
 </block>
 <block name="body">
     <div class="col-md-12 main-content">
-        <form class="row" action="{:U('')}" method="post">
+        <form class="row" action="{:U('')}">
             <div class="col-md-4">
                 <div class="form-group">
+                    <label>标题</label>
+                    <input type="text" class="form-control" name="title">
+                </div>
+
+                <div class="form-group">
                     <label>班级</label>
-                    <select class="form-control">
+                    <select class="form-control" id="cctid" name="cctid">
                         <volist name="class" id="v">
-                             <option value="{$v.id}">{$v.class}</option>
+                             <option value="{$v.id}">{$v.class} <b>{$v.course}</b></option>
                         </volist>
                     </select>
                 </div>
@@ -29,23 +34,33 @@
                 <div class="form-group">
                     <label>作业具体内容</label>
                     <div id="summernote"></div>
+                    <textarea class="form-control hidden" id="article-content" name="content"></textarea>
                 </div>
-                
+
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                     <label>作业问题文件</label>
-                    <input id="question" type="file" class="file">
+                    <input id="question" type="file">
+                    <input id="fiquestion" name="qfid" type="text" class="hidden" value>
                 </div>
                 <div class="form-group">
                     <label>答案文件</label>
-                    <input id="answer" type="file" class="file">
+                    <input id="answer" type="file">
+                    <input id="fianswer" name="afid" type="text" class="hidden" value>
+                </div>
+                <div class="form-group">
+                    <label>答案是否一起发布</label>
+                    <select class="form-control" name="answer">
+                        <option value="1">一起发布</option>
+                        <option value="0">以后再说</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>简要描述</label>
-                    <textarea class="form-control" rows="3"></textarea>
+                    <textarea class="form-control" rows="3" name="description"></textarea>
                 </div>
-                <button type="submit" class="btn btn-default">Submit</button>
+                <button type="button" class="btn btn-default ajax-post">确认</button>
             </div>
         </form>
     </div>
@@ -55,18 +70,39 @@
     <script type="text/javascript" src="__STATIC__/summernote/summernote-zh-CN.js"></script>
     <script type="text/javascript" src="__STATIC__/fileinput/js/fileinput.min.js"></script>
     <script type="text/javascript">
-        $("#question").fileinput({
-            language: 'zh',
-            uploadUrl: "{:U('file/upload')}",
-            showPreview: false,
-            showRemove: false,
+        function initFileInput(ctrlName, uploadUrl) {
+            var control = $('#' + ctrlName);
+            control.fileinput({
+                language: 'zh',
+                uploadUrl: uploadUrl,
+                showPreview: false,
+                showRemove: false,
+                allowedFileExtensions:  ['doc', 'docx', 'pdf', 'txt','md','html'],  
+            });
+        }
+        //初始化图像信息
+        function initPortrait(ctrlName, cctid) {
+            var control = $('#' + ctrlName);
+            control.fileinput('refresh', {
+                uploadExtraData: {
+                    cctid: cctid
+                },
+            });
+            control.on("fileuploaded", function (event, data) {
+                if (data.response) {
+                    $("#fi" + ctrlName).val(data.response.id);
+                    console.log($("#fi" + ctrlName).val());
+                }
+            });
+        }
+        initFileInput("question", "{:U('File/upload')}");
+        initFileInput("answer", "{:U('File/upload')}");
+        $("#cctid").bind("click", function () {
+            initPortrait("question", $("#cctid option:selected").val())
+            initPortrait("answer", $("#cctid option:selected").val())
         });
-        $("#answer").fileinput({
-            language: 'zh',
-            uploadUrl: "{:U('file/upload')}",
-            showPreview: false,
-            showRemove: false,
-        });
+
+        $("#cctid").click();
         $(document).ready(function () {
 
             $('#summernote').summernote({
@@ -75,6 +111,11 @@
                 minHeight: null, // set minimum height of editor
                 maxHeight: null, // set maximum height of editor
                 focus: true
+            });
+            // summernote.blur
+            $('#summernote').on('summernote.blur', function() {
+               $('#article-content').val($('#summernote').summernote('code'));
+               console.log( $('#article-content').val());
             });
         })
     </script>

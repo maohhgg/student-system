@@ -6,19 +6,7 @@ use Think\Model;
  * 课程模型
  */
 class CourseModel extends Model{
-    /**
-	 * 数据表前缀
-	 * @var string
-	 */
-	protected $tablePrefix = DB_PREFIX;
 
-    /**
-	 * 数据库连接
-	 * @var string
-	 */
-    protected $connection = DB_CONFIG;
-
-    
 	/* 模型自动验证 */
 	protected $_validate = array(
 		array('name', '1,40', "名称不合法", self::EXISTS_VALIDATE, 'length'),  // 专业名不合法

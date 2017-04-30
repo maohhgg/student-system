@@ -16,15 +16,15 @@ class PublicController extends \Think\Controller {
         if(IS_POST){
             /* 调用登录接口登录 */
             $User = new UserApi;
-            if(count_chars($name) == 12){
-                $uid = $User->login($name, $password,2);
-            } else {
-                $uid = $User->login($name, $password);
-            }
+            $uid = $User->login($name, $password);
+            $uid = $uid > 0 ? $uid : $User->login($name, $password, 2);
             if(0 < $uid){ //UC登录成功
                 /* 登录用户 */
                 $model = new UserModel;
                 $user = $model->info($uid);
+                if($user['type'] == 2){
+                    $this->error('你没有权限登录');
+                }
                 $auth = array(
                     'id'       => $user['id'],
                     'name'     => $user['name'],

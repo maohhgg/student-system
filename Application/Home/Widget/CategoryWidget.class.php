@@ -11,17 +11,15 @@ class CategoryWidget extends Action{
 	
 	
 	public function lists($current=''){
-		if(is_login()){
-             $user = session('user_auth');
-			 if($user['type'] == 2){
-				 $api = new \User\Api\UserApi;
-				 $category = $api->getCourse($user['id']);
-			 } else {
-				 $category = [
-					 ['course' => "所有班级",],
-				 ];
-			 }
-        }
+		$user = session('user_auth');
+		if($user && $user['type'] == 2){
+			$api = new \User\Api\UserApi;
+			$category = $api->getCourse($user['id']);
+        } else {
+			$category = [
+				['course' => "所有班级",],
+			];
+		}
 		$this->assign('category', $category);
 		$this->assign('current',$current);
 		$this->display('Widget/lists');

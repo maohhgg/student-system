@@ -42,7 +42,7 @@
 				<tr>
 					<td>
 						<eq name="vo.type" value="0">
-						<input class="ids" DISABLED type="checkbox" name="id[]" value="{$vo.uid}" />
+						<input DISABLED type="checkbox" value="{$vo.uid}" />
 						<else/>
 						<input class="ids" type="checkbox" name="id[]" value="{$vo.uid}" />
 						</eq>

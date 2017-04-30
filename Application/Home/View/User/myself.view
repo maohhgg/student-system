@@ -1,0 +1,16 @@
+<extend name="Base/common" />
+
+<block name="header">
+    <header class="jumbotron bs-docs-header" id="overview">
+        <div class="container">
+            <h2>又见面了! <span> {:get_username()}</span></h2>
+        </div>
+    </header>
+</block>
+<block name="side">
+</block>
+<block name="body">
+    <div class="col-md-12 main-content">
+        
+    </div>
+</block>

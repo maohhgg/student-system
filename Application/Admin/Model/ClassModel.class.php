@@ -6,18 +6,6 @@ use Think\Model;
  * 班级模型
  */
 class ClassModel extends Model{
-    /**
-	 * 数据表前缀
-	 * @var string
-	 */
-	protected $tablePrefix = DB_PREFIX;
-
-    /**
-	 * 数据库连接
-	 * @var string
-	 */
-    protected $connection = DB_CONFIG;
-
 
 	/* 模型自动验证 */
 	protected $_validate = array(

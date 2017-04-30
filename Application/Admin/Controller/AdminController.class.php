@@ -14,9 +14,13 @@ class AdminController extends Controller {
      */
     protected function _initialize(){
         // 获取当前用户ID
-        define('UID',is_login());
+        $user = is_login();
+        define('UID',$user );
         if( !UID ){// 还没登录 跳转到登录页面
             $this->redirect('Public/login');
+        } else if($user['type'] == 2){
+            header('HTTP/1.0 404 Not Found');
+            $this->redirect('Home/Empty/404');
         }
         $this->assign('__MENU__', $this->getMenus());
     }
@@ -76,7 +80,7 @@ class AdminController extends Controller {
         }elseif($order){
             $options['order'] = $order;
         }else{
-            $options['order'] = "id desc";
+            $options['order'] = "id asc";
         }
         unset($REQUEST['_order'],$REQUEST['_field']);
 

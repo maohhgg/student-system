@@ -20,7 +20,7 @@ return array(
     'URL_MODEL'            => 3, //URL模式
     'VAR_URL_PARAMS'       => '', // PATHINFO URL参数变量
     'URL_PATHINFO_DEPR'    => '/', //PATHINFO URL分割符
-
+    
 
     /* 数据库配置 */
     'DB_TYPE'   => 'mysqli', // 数据库类型
@@ -30,5 +30,6 @@ return array(
     'DB_PWD'    => 'root',  // 密码
     'DB_PORT'   => '3306', // 端口
     'DB_PREFIX' => 'sys_', // 数据库表前缀
-    'DB_CONFIG' => 'mysqli://root:root@127.0.0.1:3306/system',
+
+    // 'DB_CONFIG' => 'mysqli://root:root@127.0.0.1:3306/system',
 );

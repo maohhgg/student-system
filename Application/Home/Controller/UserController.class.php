@@ -5,22 +5,20 @@ use User\Api\UserApi;
 class UserController extends HomeController{
 
     /* 登录页面 */
-	public function login($username = '', $password = ''){
+	public function login($name = '', $password = ''){
 		 if(IS_POST){
             /* 调用登录接口登录 */
             $User = new UserApi;
-            if(count_chars($name) == 12){
-                $uid = $User->login($name, $password,2);
-            } else {
-                $uid = $User->login($name, $password);
-            }
+            $uid = $User->login($name, $password);
+            $uid = $uid > 0 ? $uid : $User->login($name, $password, 2);
             if(0 < $uid){ //UC登录成功
                 /* 登录用户 */
-                $model = new UserModel;
+                $model = new UserApi;
                 $user = $model->info($uid);
                 $auth = array(
                     'id'       => $user['id'],
                     'name'     => $user['name'],
+                    'type'     => $user['type'],
                 );
 
                 session('user_auth', $auth);
@@ -28,7 +26,7 @@ class UserController extends HomeController{
                 $this->success('登录成功！', U('Index/index'));
             } else { //登录失败
                 switch($uid) {
-                    case -1: $error = '用户不存在或被禁用！'; break; //系统级别禁用
+                    case -1: $error = '用户不存在或密码错误！'; break; //系统级别禁用
                     case -2: $error = '密码错误！'; break;
                     default: $error = '未知错误！'; break; // 0-接口参数错误（调试阶段使用）
                 }
@@ -107,6 +105,39 @@ class UserController extends HomeController{
         }else{
             $this->display();
         }
+    }
+
+    public function myself($id=''){
+        $user = is_login();
+        if($user){
+            if(empty($id)){
+                $id = $user['id'];
+            }
+            $this->display();
+        } else {
+            $this->error("你还没有登录！",U("Public/login"));
+        }
+    }
+
+    public function homework($afid='',$qid=''){
+        if(IS_POST){
+            $user = session('user_auth');
+            if($user['type'] != 2){
+                $api = D('File');
+                $api->deleteAll($afid);
+                $this->error("抱歉，".$user['name']."你不是本班同学！");
+            }
+            $model = D('Answer');
+            $info = $model->insert($afid,session('user_auth')['id'],$qid);
+            if(is_numeric($info)){
+                $this->success("1");
+            } else {
+                $this->error("上传失败，请重试");
+            }
+        } else {
+            $this->redirect("Empty/index");
+        }
+
     }
 
 }

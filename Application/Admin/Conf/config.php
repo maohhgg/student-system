@@ -38,7 +38,6 @@ return array(
             'child' =>[
                 '作业管理' => [
                     ['title'=>'所有作业','url'=>'Article/index'],
-                    ['title'=>'作业管理','url'=>'Article/manager'],
                 ],
                 '文件管理' => [
                     ['title'=>'所有文件','url'=>'Article/file'],

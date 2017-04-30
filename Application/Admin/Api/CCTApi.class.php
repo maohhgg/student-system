@@ -65,10 +65,12 @@ class CCTApi extends Api{
              $user = new \User\Api\UserApi;
              $course = new CourseApi;
              $class = new ClassApi; 
-             $data['class'] = $class->info($data['class'])['text'];
+             $class = $class->info($data['class']);
+             $data['class'] =  $class['text'];
+             $data['class_id'] = $class['id'];
              $data['course'] = $course->info($data['course'])['name'];
              $data['teacher'] = $user->info($data['teacher'])['name'];
-             $data['expiry'] =  $data['start']." 到 ". $data['start'];
+             $data['expiry'] =  $data['start']." 到 ". $data['end'];
          }
          return $data;
      }

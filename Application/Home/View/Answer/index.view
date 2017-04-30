@@ -1,0 +1,110 @@
+<extend name="Base/common" />
+<block name="style">
+    <style>
+        .td-score{
+            padding: 0 !important;
+        }
+        .get-score, .get-score:visited, .get-score:focus{
+            border-radius: 0;
+            width: 50px;
+            outline: none;
+            box-shadow: none;
+            line-height: 35px;
+            text-align: center;
+            font-weight: blod;
+            font-size: 15px;
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+        .get-score:focus{
+            color: #555;
+        }
+    </style>
+</block>
+<block name="header">
+    <div class="jumbotron bs-docs-header" id="content">
+        <div class="container">
+            <h2>辛苦了老师，请给高分哦！</h2>
+        </div>
+    </div>
+</block>
+<block name="side">
+    <div class="col-md-3 bs-docs-sidebar">
+        <div class="list-group">
+            <a href="{:U('Answer/index')}" class="list-group-item {$active}">尚未评分</a>
+            <a href="{:U('Answer/readed')}" class="list-group-item {$_active}">已经评分</a>
+        </div>
+    </div>
+</block>
+
+<block name="body">
+    <div class="col-md-9">
+        <!-- Contents
+        ================================================== -->
+        <section id="contents">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>学号</th>
+                        <th>姓名</th>
+                        <th>问题</th>
+                        <th>文件</th>
+                        <th>评分</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <volist name="lists" id="v">
+                        <tr>
+                            <th scope="row">{$v.user.uid}</th>
+                            <td>{$v.user.name}</td>
+                            <td>
+                                <a href="{:U('Article/detail?id='.$v['question']['id'])}">{$v.question.title}</a>
+                            </td>
+                            <td>
+                                <a download="{$v.file.name}" href="__UPLOAD__{$file.file.path}">{$v.file.name}</a>
+                            </td>
+                            <td class="td-score">
+                                <input class="get-score" url="{$v.id}" type="text" class="form-control" placeholder="{$v['score']==-1?'满分？':$v['score']}">
+                            </td>
+                        </tr>
+                    </volist>
+                </tbody>
+            </table>
+            <div class="page">
+                {$_page}
+            </div>
+        </section>
+    </div>
+</block>
+<block name="script">
+    <script type="text/javascript">
+        $('.get-score').blur(function(){
+            var score,old,id;
+            score = $(this).val();
+            old = $(this).attr('placeholder');
+            id = $(this).attr('url');
+            console.log(score+"-"+old+"-"+id);
+            if(score !== old){
+                if(0 < score && score <= 100){
+                    $.ajax({
+                        method:'post',
+                        url: "{:U('Answer/update')}",
+                        data: "score="+score+"&id="+id,
+                        success:function(data){
+                            if(data.status == 1){
+                                updateAlert("分数更新成功","alert-success");
+                                $('#get-score').attr('placeholder',data.info);
+                                // window.location.reload();
+                            } else {
+                                updateAlert(data.info,"alert-danger");
+                            }
+                        },
+                    });
+                } else {
+                    updateAlert("输入的值不在1到100范围内！","alert-danger");
+                }
+            }
+        })
+    </script>
+</block>

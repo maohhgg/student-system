@@ -3,18 +3,13 @@
 <block name="body">
 	<!-- 标题栏 -->
 	<div class="main-title">
-		<h2>作业列表</h2>
+		<h2>文件列表</h2>
 	</div>
 	<div class="cf">
-		<div class="fl">
-            <a class="btn" href="{:U('Article/add')}">新 增</a>
-            <button class="btn ajax-post confirm" url="{:U('Article/changeStatus',array('method'=>'deleteUser'))}" target-form="ids">删 除</button>
-        </div>
-
         <!-- 高级搜索 -->
 		<div class="search-form fr cf">
 			<div class="sleft">
-				<input type="text" name="nickname" class="search-input" value="{:I('nickname')}" placeholder="请输入用户昵称或者ID">
+				<input type="text" name="nickname" class="search-input" value="{:I('nickname')}" placeholder="请输入名称或者ID">
 				<a class="sch-btn" href="javascript:;" id="search" url="{:U('index')}"><i class="btn-search"></i></a>
 			</div>
 		</div>
@@ -27,14 +22,11 @@
 				<tr>
 					<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
 					<th class="">ID</th>
-					<th class="">标题</th>
-					<th class="">内容</th>
-					<th class="">问题描述文件</th>
-					<th class="">参考答案文件</th>
-					<th class="">班级</th>
-					<th class="">老师</th>
-					<th class="">时间</th>
-					<th class="">能否查看答案</th>
+					<th class="">文件名</th>
+					<th class="">大小</th>
+					<th class="">保存路径</th>
+					<th class="">上传者</th>
+					<th class="">上传时间</th>
 					<th class="">操作</th>
 				</tr>
 			</thead>
@@ -46,20 +38,11 @@
 						<input class="ids" type="checkbox" name="id[]" value="{$vo.uid}" />
 					</td>
 					<td>{$vo.id} </td>
-					<td>{$vo.title}</td>
-					<td>{:htmlspecialchars(mb_substr($vo['content'],0,15,'utf-8'))}...</td>
-					<td>{$vo.question_file.name|default="----"}</td>
-					<td>{$vo.anwser_file.name|default="----"}</td>
-                    <td>{$vo.class}</td>
-                    <td>{$vo.teacher}</td>
+					<td>{$vo.name}</td>
+                    <td>{:round($vo['size']/1024)}KB</td>
+                    <td>{$vo.path}</td>
+                    <td>{$vo.user}</td>
 					<td>{$vo.date}</td>
-                    <td>
-						<eq name="vo.answer" value="1">
-							能
-						<else/>
-							不能
-						</eq>
-					</td>
 					<td>
 						<eq name="vo.type" value="0">
 						<else/>
