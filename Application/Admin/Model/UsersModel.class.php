@@ -1,3 +1,6 @@
 <?php
 namespace Admin\Model;
-use User\Model\UserModel;
+
+class UserModel extends User\Model\UserModel{
+
+}

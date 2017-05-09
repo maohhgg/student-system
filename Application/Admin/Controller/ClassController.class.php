@@ -51,7 +51,7 @@ class ClassController extends AdminController{
                 'status' => $status,
             ];
             foreach($data as $key => $v){
-                if (empty($v)) {
+                if (strlen($v) == 0) {
                     unset($data[$key]); //删除空的属性
                 }
             }
@@ -63,21 +63,17 @@ class ClassController extends AdminController{
             }
         } else {
             $id = array_unique((array)I('id',0));
-
-            $id = is_array($id) ? implode(',',$id) : $id;
             if ( empty($id) ) {
                 $this->error('请选择要操作的数据!');
             }
-            $map['uid'] =   array('in',$id);
+ 
             switch ( strtolower($method) ){
-                case 'forbid':
-                    $this->forbid('Member', $map );
-                    break;
-                case 'update':
-                    $this->resume('Member', $map );
-                    break;
                 case 'delete':
-                    $this->delete('Member', $map );
+                    if( D('Course')->delete($id) && D('ClassCourseTeacher')->where(['class'=>$id])->delete() ){
+                        $this->success('删除成功！',U('index'));
+                    } else {
+                        $this->error('删除失败请重试！');
+                    }
                     break;
                 default:
                     $this->error('参数非法');
@@ -119,7 +115,11 @@ class ClassController extends AdminController{
                 break;
                 case 'delete':
                     if(I('id')){
-                        M('Course')->delete(I('id'));
+                        if(M('Course')->delete(I('id'))){
+                            $this->success('删除成功！',U('Class/course'));
+                        } else{
+                            $this->error('删除失败请重试！');
+                        }
                     }
                     break;
                 default:

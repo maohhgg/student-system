@@ -86,17 +86,38 @@ class UserApi extends Api{
         return $class->getCourse($user['cid']);
     }
 
-    /**
-     * 得到用
-     *
-     */
-    public function getQuestion($id = '', $cctid = ''){
-        if(empty($id)){
-            return 0;
-        }
-        $class = new \Admin\Api\ClassApi;
-        if(empty($cctid)) {
 
+
+    /*
+    * 删除用户
+    */ 
+    public function deleteAll($id){
+        $api0 = new \Admin\Api\AnswerApi;
+        $api1 = new \Admin\Model\FileModel();
+        $arr = [];
+        if(is_array($id)){
+            foreach($id as $key => $val){
+               $a = $this->delete($val,$api0,$api1);
+               if($a > 0){
+                    $arr[] = $a;
+               }
+            }
+        } else {
+            $a = $this->delete($id,$api0,$api1);
+            if($a > 0){
+                $arr[] = $a;
+            }
+        }
+        return $arr;
+    }
+    public function delete($id,$api0,$api1){
+        if(is_numeric($id)){
+            if($this->model->delete($id)){
+                $api0->delete(['uid'=>$id]);
+                $api1->delete(['uid'=>$id]);
+            } else {
+                return $id;
+            }
         }
     }
 

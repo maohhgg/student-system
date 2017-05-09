@@ -116,7 +116,8 @@ class UserController extends AdminController {
                 'status' => $status
             ];
             foreach($data as $key => $v){
-                if (empty($v)) {
+                // print_r(strlen($v)."---".$v."\n");
+                if (strlen($v) == 0) {
                     unset($data[$key]); //删除空的属性
                 }
             }
@@ -127,15 +128,24 @@ class UserController extends AdminController {
                 $this->error($this->showRegError($uid));
             }
         } else {
+           
             $id = array_unique((array)I('id',0));
-            $id = is_array($id) ? implode(',',$id) : $id;
+            $type = I('type');
             if ( empty($id) ) {
                 $this->error('请选择要操作的数据!');
             }
-            $map['uid'] =   array('in',$id);
+            if($type == 0){
+                 $this->error('管理员不能删除');
+            }
             switch ( strtolower($method) ){
-                case 'deleteuser':
-                    $this->delete('Member', $map );
+                case 'delete':
+                    $api = new UserApi;
+                    $data = $api->deleteAll($id);
+                    if(empty($data)){
+                        $this->success('删除成功！',U('index'));
+                    } else {
+                        $this->error($data.'删除失败请重试！');
+                    }
                     break;
                 default:
                     $this->error('参数非法');

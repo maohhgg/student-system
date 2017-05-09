@@ -64,6 +64,24 @@ class QuestionModel extends Model{
 		}
     }
 
+	/**
+	 * 更新问题信息
+	 * @param int $id 问题id
+	 * @param array $data 修改的字段数组
+	 * @return true 修改成功，false 修改失败
+	 */
+	public function updateClassFields($id, $data){
+		if(empty($id) || empty($data)){
+			$this->error = '参数错误！';
+			return false;
+		}
+		$data = $this->create($data,Model::MODEL_UPDATE);
+		if($data){
+			return $this->where(array('id'=>$id))->save($data);
+		}
+		return false;
+	}
+
 	 /**
 	 * 获取列表
 	 * @param  integer  $cctid  分类ID

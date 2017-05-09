@@ -63,4 +63,51 @@ class ArticleController extends HomeController {
             $this->display();
         }
     }
+
+    public function change($id='',$title='', $description='', $content='', $qfid='', $afid='', $cctid='',$answer=''){
+         if(IS_POST && $id){
+            $api = new \Admin\Api\QuestionApi();
+            $data = [
+                'title' => $title,
+                'description' => $description,
+                'content' => $content,
+                'qfid' => $qfid,
+                'afid' => $afid,
+                'cctid' => $cctid,
+                'answer' => $answer,
+            ];
+            foreach($data as $key => $v){
+                if (empty($v)) {
+                    unset($data[$key]); //删除空的属性
+                }
+            }
+            $info = $api->updateInfo($id, $data);
+            if($info){
+                $this->success('更新成功！',U('Article/detail',['id' => $id]));
+            } else {
+                $this->error($info);
+            }
+        } else {
+            $user = is_login();
+            $id = I('id');
+            if(!$id || !$user){
+                $this->redirect("Empty/index");
+            }
+            $api = new \Admin\Api\QuestionApi();
+		    $lists = $api->detail($id);
+           if($user['type']!=1){
+                if($user['id'] != $lists['teacher_id']){
+                     $this->error("你不是发布者，请勿修改",U("Index/index"));
+                }
+                $this->error("只有任课教师才可以发布作业",U("Index/index"));
+            }
+            $file = $api->file($lists);
+            $api = new \Admin\Api\CCTApi;
+            $list = $api->lists(['teacher'=>$user['id']]);
+            $this->assign("class",$list);
+            $this->assign("lists",$lists);
+            $this->display('add');
+        }
+    }
+
 }

@@ -26,7 +26,7 @@
             <h4>文档下载</h4>
             <div class="btn-group" role="group" style="margin:10px 0;">
                 <empty name="file.question">
-                    <button type="button" class="btn btn-default" disabled="disabled">没有文件.doc</button>
+                    <button type="button" class="btn btn-default" disabled="disabled">没有文件</button>
                 <else /> 
                     <a type="button" class="btn btn-default" download="{$file['question']['name']}" href="__UPLOAD__{$file['question']['path']}">{$file['question']['name']}</a>
                 </empty> 
@@ -39,6 +39,16 @@
             </div>
         </div>
         <hr/>
+
+        <if condition="get_username() eq $info['teacher']">  
+        <div class="bs-docs-section" style="width:300px">
+            <h4 class="">问题修改</h4>
+            <div class="btn-group" role="group" style="margin:10px 0;">
+               <a type="button" class="btn btn-success" href="{:U('Article/change?id='.$info['id'])}"> 修改问题内容 </a>
+            </div>
+        </div>
+        <hr/>
+        </if>
 
         <div class="bs-docs-section" style="width:300px">
             <h4 class="">作业上传</h4>

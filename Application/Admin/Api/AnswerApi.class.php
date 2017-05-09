@@ -26,6 +26,20 @@ class AnswerApi extends Api{
         return $array;
     }
 
+    /**
+     *  删除一个问题下的的所有答案和文件
+     *  
+     */
+    public function delete($map){
+        $api = D('File');
+        $file = $this->model->where($map)->field(['id','afid'])->select();
+        foreach ($file as $key => $value) {
+            $this->model->delete($value['id']);
+            $api->deleteAll($value['afid']);
+        }
+        return true;
+    }
+
     public function bind_data($data){
         $user = new \User\Api\UserApi;
         $file = D('File');

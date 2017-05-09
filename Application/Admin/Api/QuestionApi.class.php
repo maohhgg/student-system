@@ -60,6 +60,21 @@ class QuestionApi extends \User\Api\Api{
             return false;
         }
     }
+
+    /**
+     * 更新问题信息
+     * @param int $uid 问题id
+     * @param array $data 修改的字段数组
+     * @return true 修改成功，false 修改失败
+     */
+    public function updateInfo($uid, $data){
+        if($this->model->updateClassFields($uid, $data) !== false){
+            return true;
+        }else{
+            return  $this->model->getError();
+        }
+    }
+
     public function lists($cctid='', $order = '`id` DESC', $field = true){
         return $this->model->lists($cctid, $order, $field);
     }

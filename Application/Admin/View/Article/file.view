@@ -44,11 +44,7 @@
                     <td>{$vo.user}</td>
 					<td>{$vo.date}</td>
 					<td>
-						<eq name="vo.type" value="0">
-						<else/>
-						<a href="{:U('Article/changeStatus?id='.$vo['id'])}">编辑</a>
-                        <a href="{:U('Article/changeStatus?method=delete&id='.$vo['id'].'&type='.$vo['type'])}" class="confirm ajax-get">删除</a>
-						</eq>
+                        <a href="{:U('Article/filedelete?id='.$vo['id'].'&type='.$vo['type'])}" class="confirm ajax-get">删除</a>
 					</td>
 				</tr>
 				</volist>

@@ -18,7 +18,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label>标题</label>
-                    <input type="text" class="form-control" name="title">
+                    <input type="text" class="form-control" name="title" value="{$lists.title|default=''}">
                 </div>
 
                 <div class="form-group">
@@ -51,33 +51,47 @@
                 </div>
                 <div class="form-group">
                     <label>答案是否一起发布</label>
-                    <select class="form-control" name="answer">
+                    <select class="form-control" id="answer" name="answer">
                         <option value="1">一起发布</option>
                         <option value="0">以后再说</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>简要描述</label>
-                    <textarea class="form-control" rows="3" name="description"></textarea>
+                    <textarea class="form-control" rows="3" name="description">{$lists.description|default=''}</textarea>
                 </div>
-                <button type="button" class="btn btn-default ajax-post">确认</button>
+                <div class="form-item hidden">
+                    <div class="controls">
+                        <input type="text" class="text input-large" name="id" value="{$lists.id|default=''}">
+                    </div>
+                </div>
+                        
+                <button type="button" class="btn btn-success ajax-post ">确认</button>
             </div>
         </form>
     </div>
+
+    <div class="hidden" id="php-content">
+        {$lists.content}
+    </div>
+
 </block>
 <block name="script">
     <script type="text/javascript" src="__STATIC__/summernote/summernote.js"></script>
     <script type="text/javascript" src="__STATIC__/summernote/summernote-zh-CN.js"></script>
     <script type="text/javascript" src="__STATIC__/fileinput/js/fileinput.min.js"></script>
     <script type="text/javascript">
-        function initFileInput(ctrlName, uploadUrl) {
+
+
+        function initFileInput(ctrlName, uploadUrl,content) {
             var control = $('#' + ctrlName);
             control.fileinput({
-                language: 'zh',
+                language: 'cn',
                 uploadUrl: uploadUrl,
                 showPreview: false,
                 showRemove: false,
-                allowedFileExtensions:  ['doc', 'docx', 'pdf', 'txt','md','html'],  
+                allowedFileExtensions:  ['doc', 'docx', 'pdf', 'txt','md','html'], 
+                initialCaption: content,
             });
         }
         //初始化图像信息
@@ -95,28 +109,39 @@
                 }
             });
         }
-        initFileInput("question", "{:U('File/upload')}");
-        initFileInput("answer", "{:U('File/upload')}");
+        initFileInput("question", "{:U('File/upload')}","{$lists.question_file.name|default=''}");
+        initFileInput("answer", "{:U('File/upload')}","{$lists.anwser_file.name|default=''}");
         $("#cctid").bind("click", function () {
             initPortrait("question", $("#cctid option:selected").val())
             initPortrait("answer", $("#cctid option:selected").val())
         });
 
         $("#cctid").click();
+
+        $('#summernote').summernote({
+            lang: 'zh-CN',
+            height: 500, // set editor height
+            minHeight: null, // set minimum height of editor
+            maxHeight: null, // set maximum height of editor
+            focus: true
+        });
         $(document).ready(function () {
 
-            $('#summernote').summernote({
-                lang: 'zh-CN',
-                height: 500, // set editor height
-                minHeight: null, // set minimum height of editor
-                maxHeight: null, // set maximum height of editor
-                focus: true
-            });
             // summernote.blur
             $('#summernote').on('summernote.blur', function() {
                $('#article-content').val($('#summernote').summernote('code'));
                console.log( $('#article-content').val());
             });
         })
+
+        
+        // 数据绑定
+       $('#summernote').summernote('code', $('#php-content').html());  
+       $('#fiquestion').val("{$lists.qfid}");  
+       $('#fianswer').val("{$lists.afid}");  
+       
+       $("#cctid option[value={$lists.cctid}]").eq(0).attr("selected",true);
+       $("#answer option[value={$lists.answer}]").eq(0).attr("selected",true);
+        /* ----------- 数据绑定结束 --------- */
     </script>
 </block>
